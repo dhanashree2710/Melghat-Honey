@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Melghat Honey</title>
+  <meta name="description" content="Login or create your Melghat Honey account">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1b5e20 0%, #3e2723 50%, #2e7d32 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 12px;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+    }
+    .auth-wrap {
+      width: 100%;
+      max-width: 920px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #fff;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      animation: authIn 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @keyframes authIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .auth-visual {
+      background: linear-gradient(160deg, rgba(30,50,25,0.75), rgba(50,30,20,0.85)),
+                  url('images/deu0p.jpg') center/cover no-repeat;
+      color: #fff;
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      min-height: 520px;
+    }
+    .auth-visual::after {
+      content: '🐝';
+      position: absolute;
+      font-size: 3rem;
+      bottom: 30px;
+      right: 30px;
+      animation: beeFloat 3s ease-in-out infinite;
+      opacity: 0.9;
+    }
+    @keyframes beeFloat {
+      0%, 100% { transform: translate(0, 0) rotate(-8deg); }
+      50% { transform: translate(-12px, -18px) rotate(8deg); }
+    }
+    .auth-visual h2 {
+      font-weight: 800;
+      font-size: 1.9rem;
+      line-height: 1.25;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .auth-visual p { opacity: 0.9; font-size: 0.98rem; margin-top: 12px; }
+    .auth-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .auth-badges span {
+      background: rgba(244,180,0,0.25);
+      border: 1px solid rgba(244,180,0,0.5);
+      color: #ffd54f;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .auth-form-side {
+      padding: 36px 36px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Logo – no white background */
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .auth-logo a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      gap: 10px;
+    }
+    .logo-badge {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: transparent;
+      border: 2px solid rgba(244, 180, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 6px;
+    }
+    .logo-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: transparent;
+    }
+    .logo-text {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #3e2723;
+      letter-spacing: 0.3px;
+      line-height: 1.2;
+    }
+    .logo-text span {
+      display: block;
+      font-weight: 500;
+      font-size: 0.72rem;
+      color: #2e7d32;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: #faf6ee;
+      border-radius: 50px;
+      padding: 4px;
+      margin-bottom: 24px;
+    }
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      color: #777;
+      transition: all 0.3s;
+      border: none;
+      background: none;
+    }
+    .auth-tab.active {
+      background: linear-gradient(135deg, #F4B400, #e6a800);
+      color: #1a120f;
+      box-shadow: 0 4px 14px rgba(244,180,0,0.35);
+    }
+    .form-panel { display: none; }
+    .form-panel.active { display: block; animation: panelFade 0.4s ease; }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .form-label { font-size: 0.85rem; color: #555; margin-bottom: 4px; }
+    .form-control {
+      border-radius: 12px;
+      border: 1.5px solid #e8dcc8;
+      padding: 11px 14px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+      border-color: #F4B400;
+      box-shadow: 0 0 0 3px rgba(244,180,0,0.2);
+    }
+    .btn-auth {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 20px rgba(46,125,50,0.3);
+    }
+    .btn-auth:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(46,125,50,0.4);
+      color: #fff;
+    }
+    .auth-alert {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      animation: alertSlide 0.4s ease;
+    }
+    @keyframes alertSlide {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .back-home { text-align: center; margin-top: 20px; }
+    .back-home a {
+      color: #2e7d32;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .back-home a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .auth-wrap { grid-template-columns: 1fr; }
+      .auth-visual { min-height: 180px; padding: 28px 24px; }
+      .auth-visual h2 { font-size: 1.45rem; }
+      .auth-form-side { padding: 28px 22px; }
+      .logo-badge { width: 80px; height: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-visual">
+      <div>
+        <p class="text-uppercase mb-2" style="letter-spacing:2px;font-size:0.75rem;color:#ffd54f">Melghat Tiger Reserve</p>
+        <h2>Pure Forest Honey, Straight from Nature</h2>
+        <p>Login to track orders, save favourites and enjoy a smoother shopping experience.</p>
+        <div class="auth-badges">
+          <span>100% Natural</span>
+          <span>Tribal Harvested</span>
+          <span>Lab Tested</span>
+        </div>
+      </div>
+      <div class="small opacity-75">© 2026 Melghat Honey</div>
+    </div>
+
+    <div class="auth-form-side">
+      <div class="auth-logo">
+        <a href="index.html" title="Melghat Honey">
+          <div class="logo-badge">
+            <img src="images/logo.png" alt="Melghat Honey"
+                 onerror="this.onerror=null; this.src='images/favicon.png';">
+          </div>
+          <div class="logo-text">
+            Melghat Honey
+            <span>Forest Pure</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" id="tabLogin" onclick="showPanel('login')">Login</button>
+        <button type="button" class="auth-tab" id="tabSignup" onclick="showPanel('signup')">Create Account</button>
+      </div>
+
+      <div id="alertBox" class="auth-alert"></div>
+
+      <div id="panelLogin" class="form-panel active">
+        <form onsubmit="handleLogin(event)">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required placeholder="you@example.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" class="form-control" id="loginPass" required placeholder="Your password">
+          </div>
+          <div class="text-end mb-3">
+            <a href="#" class="small text-decoration-none" style="color:#2e7d32" onclick="showPanel('forgot'); return false;">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-auth">Login</button>
+        </form>
+      </div>
+
+      <div id="panelSignup" class="form-panel">
+        <form onsubmit="handleSignup(event)">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <input type="text" class="form-control" id="suName" required placeholder="Your name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="suEmail" required placeholder="you@example.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Phone</label>
+            <input type="tel" class="form-control" id="suPhone" placeholder="+91 ...">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <input type="password" class="form-control" id="suPass" required minlength="6" placeholder="Min 6 characters">
+          </div>
+          <button type="submit" class="btn btn-auth">Create Account</button>
+        </form>
+      </div>
+
+      <div id="panelForgot" class="form-panel">
+        <p class="text-muted small mb-3">Enter your registered email and a new password.</p>
+        <form onsubmit="handleForgot(event)">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email</label>
+            <input type="email" class="form-control" id="fpEmail" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">New Password</label>
+            <input type="password" class="form-control" id="fpPass" required minlength="6">
+          </div>
+          <button type="submit" class="btn btn-auth">Reset Password</button>
+          <button type="button" class="btn btn-link w-100 mt-2" style="color:#2e7d32" onclick="showPanel('login')">Back to Login</button>
+        </form>
+      </div>
+
+      <div class="back-home">
+        <a href="index.html"><i class="fas fa-arrow-left me-1"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/supabase-config.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script>
+    function showPanel(name) {
+      document.querySelectorAll(".form-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".auth-tab").forEach(t => t.classList.remove("active"));
+      if (name === "login") {
+        document.getElementById("panelLogin").classList.add("active");
+        document.getElementById("tabLogin").classList.add("active");
+      } else if (name === "signup") {
+        document.getElementById("panelSignup").classList.add("active");
+        document.getElementById("tabSignup").classList.add("active");
+      } else {
+        document.getElementById("panelForgot").classList.add("active");
+      }
+      hideAlert();
+    }
+    function showAlert(msg, ok) {
+      const box = document.getElementById("alertBox");
+      box.style.display = "block";
+      box.style.background = ok ? "#e8f5e9" : "#ffebee";
+      box.style.color = ok ? "#1b5e20" : "#b71c1c";
+      box.textContent = msg;
+      if (typeof showToast === "function") showToast(msg, ok ? "success" : "error");
+    }
+    function hideAlert() {
+      document.getElementById("alertBox").style.display = "none";
+    }
+    async function handleLogin(e) {
+      e.preventDefault();
+      hideAlert();
+      try {
+        const user = await loginUser(
+          document.getElementById("loginEmail").value,
+          document.getElementById("loginPass").value
+        );
+        showAlert("Welcome, " + user.full_name + "!", true);
+        setTimeout(() => {
+          if (user.role === "admin" || user.role === "staff") {
+            window.location.href = "admin/index.html";
+          } else {
+            window.location.href = "index.html";
+          }
+        }, 700);
+      } catch (err) {
+        showAlert(err.message || "Login failed", false);
+      }
+    }
+    async function handleSignup(e) {
+      e.preventDefault();
+      hideAlert();
+      try {
+        await signupUser({
+          full_name: document.getElementById("suName").value,
+          email: document.getElementById("suEmail").value,
+          phone: document.getElementById("suPhone").value,
+          password: document.getElementById("suPass").value
+        });
+        showAlert("Account created! Redirecting...", true);
+        setTimeout(() => { window.location.href = "index.html"; }, 800);
+      } catch (err) {
+        showAlert(err.message || "Signup failed", false);
+      }
+    }
+    async function handleForgot(e) {
+      e.preventDefault();
+      hideAlert();
+      try {
+        await resetPassword(
+          document.getElementById("fpEmail").value,
+          document.getElementById("fpPass").value
+        );
+        showAlert("Password updated. You can login now.", true);
+        setTimeout(() => showPanel("login"), 1200);
+      } catch (err) {
+        showAlert(err.message || "Reset failed", false);
+      }
+    }
+    const s = getSession();
+    if (s) {
+      if (s.role === "admin" || s.role === "staff") location.href = "admin/index.html";
+      else location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

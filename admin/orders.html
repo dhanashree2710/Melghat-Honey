@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | Melghat Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+  <style>
+    body { background: #f5f0e8; }
+    .table-wrap { background:#fff; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.05); overflow:hidden; }
+  </style>
+</head>
+<body>
+  <div class="row g-0 min-vh-100">
+    <div class="col-md-2 admin-sidebar" id="adminSidebar"></div>
+    <div class="col-md-10 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0">Orders</h3>
+        <button class="btn btn-outline-secondary btn-sm" onclick="loadOrders()"><i class="fas fa-sync me-1"></i>Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table table-hover mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Order #</th><th>Customer</th><th>Phone</th><th>Total</th>
+              <th>Payment</th><th>Status</th><th>Date</th><th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody id="ordTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/supabase-config.js"></script>
+  <script src="../js/admin-common.js"></script>
+  <script>
+    const STATUSES = ["pending","confirmed","packed","shipped","out_for_delivery","delivered","cancelled","returned"];
+    const session = requireStaff();
+    if (session) { renderAdminSidebar("orders"); loadOrders(); }
+
+    async function loadOrders() {
+      const rows = await fetchOrders();
+      document.getElementById("ordTable").innerHTML = rows.map(o => `
+        <tr>
+          <td class="fw-semibold">${o.order_number}${ (o.notes||"").includes("BULK") ? ' <span class="badge bg-warning text-dark">BULK</span>' : "" }</td>
+          <td>${o.customer_name}<br><small class="text-muted">${o.customer_email||""}</small></td>
+          <td>${o.customer_phone}</td>
+          <td>${formatPrice(o.total_amount)}</td>
+          <td><small>${o.payment_method}</small><br>${o.payment_status}</td>
+          <td>${statusBadge(o.order_status)}</td>
+          <td><small>${o.created_at ? new Date(o.created_at).toLocaleString() : ""}</small></td>
+          <td>
+            <select class="form-select form-select-sm" style="min-width:140px" onchange="changeStatus('${o.id}', this.value)">
+              ${STATUSES.map(s => `<option value="${s}" ${s===o.order_status?"selected":""}>${s}</option>`).join("")}
+            </select>
+          </td>
+        </tr>`).join("") || "<tr><td colspan='8' class='text-center text-muted py-4'>No orders in database yet</td></tr>";
+    }
+
+    async function changeStatus(id, status) {
+      try {
+        await updateOrderStatus(id, status);
+        loadOrders();
+      } catch (e) { alert(e.message); }
+    }
+  </script>
+</body>
+</html>

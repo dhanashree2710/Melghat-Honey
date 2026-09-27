@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <title>Contact | Melghat Honey</title>
+  <meta name="description" content="Contact Melghat Honey — pure forest honey from Melghat, Maharashtra. Call, WhatsApp or send a message.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    .contact-hero {
+      min-height: 38vh;
+      background: linear-gradient(135deg, rgba(78,52,46,0.92), rgba(46,125,50,0.75)),
+                  url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&q=80') center/cover no-repeat;
+      display: flex; align-items: center; color: #fff; text-align: center;
+    }
+    .contact-hero h1 { font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+    .contact-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 24px;
+      height: 100%;
+      box-shadow: 0 10px 35px rgba(78,52,46,0.1);
+      border: 1px solid rgba(244,180,0,0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+    .contact-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 45px rgba(78,52,46,0.16);
+      border-color: var(--honey-gold);
+    }
+    .contact-card .icon-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+    .contact-card .icon-circle.phone { background: linear-gradient(135deg, #2e7d32, #1b5e20); }
+    .contact-card .icon-circle.email { background: linear-gradient(135deg, #f4b400, #e6a800); color: #3e2723; }
+    .contact-card .icon-circle.loc { background: linear-gradient(135deg, #4e342e, #3e2723); }
+    .contact-card a { color: inherit; text-decoration: none; }
+    .contact-card a:hover { color: var(--honey-gold); }
+
+    .form-panel {
+      background: #fff;
+      border-radius: 24px;
+      padding: 36px 32px;
+      box-shadow: 0 12px 40px rgba(78,52,46,0.12);
+      border: 1px solid rgba(244,180,0,0.2);
+    }
+    .form-panel .form-control {
+      border-radius: 12px;
+      border: 2px solid #e8dfd0;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .form-panel .form-control:focus {
+      border-color: var(--honey-gold);
+      box-shadow: 0 0 0 3px rgba(244,180,0,0.2);
+    }
+    .form-panel label { color: var(--dark-brown); font-size: 0.9rem; }
+    .btn-submit {
+      background: linear-gradient(135deg, var(--honey-gold), #e6a800);
+      color: var(--dark-brown) !important;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 32px;
+      box-shadow: 0 6px 20px rgba(244,180,0,0.4);
+      transition: all 0.3s;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(244,180,0,0.55);
+      color: #000 !important;
+    }
+    .side-panel {
+      background: linear-gradient(160deg, #fffbf0, #f5f0e8);
+      border-radius: 24px;
+      padding: 32px 28px;
+      height: 100%;
+      border: 1px solid rgba(244,180,0,0.18);
+    }
+    .side-panel .info-row {
+      display: flex; gap: 14px; align-items: flex-start;
+      margin-bottom: 22px;
+    }
+    .side-panel .info-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #fff; font-size: 1.1rem;
+    }
+    .map-wrap {
+      border-radius: 16px; overflow: hidden;
+      height: 220px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      border: 3px solid #fff;
+    }
+    .map-wrap iframe { width: 100%; height: 100%; border: 0; }
+    .wa-cta {
+      background: #25d366;
+      color: #fff !important;
+      font-weight: 600;
+      border-radius: 50px;
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      text-decoration: none;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 6px 18px rgba(37,211,102,0.35);
+    }
+    .wa-cta:hover { transform: translateY(-2px); color: #fff !important; box-shadow: 0 8px 24px rgba(37,211,102,0.5); }
+    @media (max-width: 768px) {
+      .form-panel { padding: 24px 18px; }
+      .side-panel { padding: 24px 18px; margin-top: 8px; }
+      .contact-hero { min-height: 32vh; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" title="Melghat Honey">
+        <img src="images/logo.png" alt="Melghat Honey" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="bulk-order.html">Bulk Order</a></li>
+          <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <div class="header-search" id="headerSearch">
+            <input type="search" id="globalSearchInput" placeholder="Search honey..." onkeydown="if(event.key==='Enter'){goSearch();}">
+            <a href="#" class="search-toggle nav-icon-btn" onclick="toggleHeaderSearch(event)" title="Search"><i class="fas fa-search"></i></a>
+          </div>
+          <a href="my-orders.html" class="nav-icon-btn nav-icon-orders" title="My Orders"><i class="fas fa-clipboard-list"></i></a>
+          <a href="#" class="nav-icon-btn nav-icon-cart position-relative" onclick="openCartModal(); return false;" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cartBadge" class="cart-badge" style="display:none">0</span>
+          </a>
+          <a href="login.html" class="nav-icon-btn nav-icon-login" title="Login / Account"><i class="fas fa-user-circle"></i></a>
+          <a href="products.html" class="btn btn-order">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="contact-hero">
+    <div class="container fade-in">
+      <p class="text-uppercase mb-2" style="letter-spacing:3px;font-size:0.85rem;color:#f4b400">Contact Us</p>
+      <h1>Get in Touch</h1>
+      <p class="lead opacity-90 mt-2 mb-0">Questions about pure Melghat honey? We're here to help.</p>
+    </div>
+  </section>
+
+  <!-- Quick contact cards -->
+  <section class="py-4" style="margin-top:-40px;position:relative;z-index:2">
+    <div class="container">
+      <div class="row g-3">
+        <div class="col-md-4 fade-in">
+          <div class="contact-card">
+            <div class="icon-circle phone"><i class="fas fa-phone"></i></div>
+            <h6 class="fw-bold mb-1">Phone</h6>
+            <a href="tel:+919699544383">+91 96995 44383</a>
+          </div>
+        </div>
+        <div class="col-md-4 fade-in">
+          <div class="contact-card">
+            <div class="icon-circle email"><i class="fas fa-envelope"></i></div>
+            <h6 class="fw-bold mb-1">Email</h6>
+            <a href="mailto:hello@melghathoney.com">hello@melghathoney.com</a>
+          </div>
+        </div>
+        <div class="col-md-4 fade-in">
+          <div class="contact-card">
+            <div class="icon-circle loc"><i class="fas fa-map-marker-alt"></i></div>
+            <h6 class="fw-bold mb-1">Location</h6>
+            <span class="text-muted small">Melghat, Amravati · Maharashtra</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Form + side panel -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7 fade-in">
+          <div class="form-panel">
+            <h3 class="fw-bold mb-1" style="color:var(--dark-brown)">Send us a Message</h3>
+            <p class="text-muted mb-4">We'll get back to you shortly via WhatsApp or phone.</p>
+            <form onsubmit="submitContact(event)">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Name *</label>
+                  <input type="text" class="form-control" id="contactName" required placeholder="Your full name">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone *</label>
+                  <input type="tel" class="form-control" id="contactPhone" required placeholder="+91 XXXXX XXXXX">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Email <span class="text-muted fw-normal">(optional)</span></label>
+                  <input type="email" class="form-control" id="contactEmail" placeholder="you@example.com">
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Message *</label>
+                  <textarea class="form-control" id="contactMessage" rows="5" required placeholder="How can we help you?"></textarea>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-5 fade-in">
+          <div class="side-panel">
+            <h4 class="fw-bold mb-4" style="color:var(--dark-brown)">Contact Details</h4>
+            <div class="info-row">
+              <div class="info-icon" style="background:linear-gradient(135deg,#2e7d32,#1b5e20)"><i class="fas fa-phone"></i></div>
+              <div>
+                <h6 class="mb-1 fw-semibold">Phone</h6>
+                <p class="mb-0 text-muted"><a href="tel:+919699544383" class="text-muted text-decoration-none">+91 96995 44383</a></p>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon" style="background:linear-gradient(135deg,#f4b400,#e6a800);color:#3e2723"><i class="fas fa-envelope"></i></div>
+              <div>
+                <h6 class="mb-1 fw-semibold">Email</h6>
+                <p class="mb-0 text-muted"><a href="mailto:hello@melghathoney.com" class="text-muted text-decoration-none">hello@melghathoney.com</a></p>
+              </div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon" style="background:linear-gradient(135deg,#4e342e,#3e2723)"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <h6 class="mb-1 fw-semibold">Location</h6>
+                <p class="mb-0 text-muted">Melghat, Amravati District<br>Maharashtra, India</p>
+              </div>
+            </div>
+            <a href="https://wa.me/919699544383?text=Hello%20Melghat%20Honey!" class="wa-cta mt-2" target="_blank" rel="noopener">
+              <i class="fab fa-whatsapp fa-lg"></i> Chat on WhatsApp
+            </a>
+            <div class="map-wrap mt-4">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.5!2d77.15!3d21.35!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd6f1f0f0f0f0f1%3A0x0!2sMelghat%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1600000000000"
+                allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="Melghat Maharashtra map"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA strip -->
+  <section class="py-4" style="background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff">
+    <div class="container text-center fade-in">
+      <p class="mb-2 fw-semibold">Prefer to order in bulk?</p>
+      <a href="bulk-order.html" class="btn btn-shop btn-lg me-2">Bulk Enquiry</a>
+      <a href="products.html" class="btn btn-bulk btn-lg">Shop Retail</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="mb-3"><img src="images/logo.png" alt="Melghat Honey" class="footer-logo-img"></div>
+          <p class="text-white-50">Pure organic forest honey harvested by tribal communities of Melghat, Maharashtra.</p>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-warning mb-3">Quick Links</h6>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="bulk-order.html">Bulk Order</a>
+            <a href="contact.html">Contact</a>
+            <a href="my-orders.html">My Orders</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-warning mb-3">Contact</h6>
+          <p class="text-white-50 mb-1"><i class="fas fa-phone me-2"></i> +91 96995 44383</p>
+          <p class="text-white-50 mb-1"><i class="fas fa-envelope me-2"></i> hello@melghathoney.com</p>
+          <p class="text-white-50 mb-3"><i class="fas fa-map-marker-alt me-2"></i> Melghat, Maharashtra</p>
+          <h6 class="text-warning mb-2">Follow Us</h6>
+          <div class="social-icons social-row">
+            <a href="https://wa.me/919699544383" target="_blank" class="wa"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://instagram.com" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+            <a href="https://facebook.com" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Melghat Honey. All Rights Reserved. | Design by <span class="designer">KDRT IT Solutions LLP</span>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919699544383?text=Hello%20Melghat%20Honey!" class="whatsapp-float" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  <div class="modal fade" id="cartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="cartModalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

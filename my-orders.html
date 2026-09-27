@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <title>My Orders | Melghat Honey</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" title="Melghat Honey">
+        <img src="images/logo.png" alt="Melghat Honey" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="bulk-order.html">Bulk Order</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <div class="header-search" id="headerSearch">
+            <input type="search" id="globalSearchInput" placeholder="Search honey..." onkeydown="if(event.key==='Enter'){goSearch();}">
+            <a href="#" class="search-toggle nav-icon-btn" onclick="toggleHeaderSearch(event)" title="Search"><i class="fas fa-search"></i></a>
+          </div>
+          <a href="my-orders.html" class="nav-icon-btn nav-icon-orders" title="My Orders"><i class="fas fa-clipboard-list"></i></a>
+          <a href="#" class="nav-icon-btn nav-icon-cart position-relative" onclick="openCartModal(); return false;" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cartBadge" class="cart-badge" style="display:none">0</span>
+          </a>
+          <a href="login.html" class="nav-icon-btn nav-icon-login" title="Login"><i class="fas fa-user-circle"></i></a>
+          <a href="products.html" class="btn btn-order">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="py-5" style="background:linear-gradient(135deg,#4e342e,#3e2723);color:#fff">
+    <div class="container text-center">
+      <h1 class="fw-bold">My Orders</h1>
+      <p class="lead opacity-75 mb-0">Track and view your order history</p>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div id="ordersGate" class="text-center py-5" style="display:none">
+        <i class="fas fa-lock fa-3x text-warning mb-3"></i>
+        <h4>Please login to view your orders</h4>
+        <a href="login.html" class="btn btn-warning fw-semibold mt-2">Login / Sign Up</a>
+      </div>
+      <div id="ordersContent" style="display:none">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="mb-0">Hello, <span id="custName"></span></h5>
+          <button class="btn btn-outline-secondary btn-sm" onclick="loadMyOrders()"><i class="fas fa-sync"></i></button>
+        </div>
+        <div class="row g-3" id="ordersList"></div>
+      </div>
+    </div>
+  </section>
+
+    <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="mb-3"><img src="images/logo.png" alt="Melghat Honey" class="footer-logo-img"></div>
+          <p class="text-white-50">Pure organic forest honey harvested by tribal communities of Melghat, Maharashtra.</p>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-warning mb-3">Quick Links</h6>
+          <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="bulk-order.html">Bulk Order</a>
+            <a href="contact.html">Contact</a>
+            <a href="my-orders.html">My Orders</a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h6 class="text-warning mb-3">Contact</h6>
+          <p class="text-white-50 mb-1"><i class="fas fa-phone me-2"></i> +91 96995 44383</p>
+          <p class="text-white-50 mb-1"><i class="fas fa-envelope me-2"></i> hello@melghathoney.com</p>
+          <p class="text-white-50 mb-3"><i class="fas fa-map-marker-alt me-2"></i> Melghat, Maharashtra</p>
+          <h6 class="text-warning mb-2">Follow Us</h6>
+          <div class="social-icons social-row">
+            <a href="https://wa.me/919699544383" target="_blank" class="wa"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://instagram.com" target="_blank" class="ig"><i class="fab fa-instagram"></i></a>
+            <a href="https://facebook.com" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Melghat Honey. All Rights Reserved. | Design by <span class="designer">KDRT IT Solutions LLP</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="cartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="cartModalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const session = getSession();
+    if (!session) {
+      document.getElementById("ordersGate").style.display = "block";
+    } else {
+      document.getElementById("ordersContent").style.display = "block";
+      document.getElementById("custName").textContent = session.full_name;
+      loadMyOrders();
+    }
+
+    const statusColor = {
+      pending: "secondary", confirmed: "primary", packed: "info",
+      shipped: "warning", out_for_delivery: "warning", delivered: "success",
+      cancelled: "danger", returned: "dark"
+    };
+
+    async function loadMyOrders() {
+      const list = document.getElementById("ordersList");
+      list.innerHTML = '<div class="col-12 text-center text-muted">Loading...</div>';
+      try {
+        let rows = await sbGet("orders", `user_id=eq.${session.id}&select=*&order=created_at.desc`);
+        if (!rows.length) {
+          // also match by email for guest-converted
+          rows = await sbGet("orders", `customer_email=eq.${encodeURIComponent(session.email)}&select=*&order=created_at.desc`);
+        }
+        if (!rows.length) {
+          list.innerHTML = `<div class="col-12 text-center py-5">
+            <p class="text-muted">No orders yet.</p>
+            <a href="products.html" class="btn btn-warning">Shop Now</a>
+          </div>`;
+          return;
+        }
+        list.innerHTML = "";
+        for (const o of rows) {
+          let items = [];
+          try {
+            items = await sbGet("order_items", `order_id=eq.${o.id}&select=*`);
+          } catch (e) {}
+          const itemsHtml = items.map(it =>
+            `<li>${it.product_name} (${it.product_size || ""}) × ${it.quantity} — ${formatPrice(it.total_price)}</li>`
+          ).join("") || "<li class='text-muted'>Items on WhatsApp order</li>";
+          const col = statusColor[o.order_status] || "secondary";
+          list.innerHTML += `
+            <div class="col-12">
+              <div class="card border-0 shadow-sm rounded-4 mb-2">
+                <div class="card-body">
+                  <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                    <div>
+                      <h6 class="mb-0 fw-bold">${o.order_number}</h6>
+                      <small class="text-muted">${o.created_at ? new Date(o.created_at).toLocaleString() : ""}</small>
+                    </div>
+                    <span class="badge bg-${col} align-self-start">${o.order_status}</span>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <ul class="small mb-2 ps-3">${itemsHtml}</ul>
+                    </div>
+                    <div class="col-md-6 small">
+                      <p class="mb-1"><strong>Total:</strong> ${formatPrice(o.total_amount)}</p>
+                      <p class="mb-1"><strong>Payment:</strong> ${o.payment_method} (${o.payment_status})</p>
+                      <p class="mb-1"><strong>Ship to:</strong> ${o.shipping_address || "-"}</p>
+                      ${o.tracking_number ? `<p class="mb-1"><strong>Tracking:</strong> ${o.tracking_number} ${o.courier_name ? "("+o.courier_name+")" : ""}</p>` : ""}
+                      ${o.notes ? `<p class="mb-0 text-muted">${o.notes}</p>` : ""}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+        }
+      } catch (e) {
+        list.innerHTML = `<div class="col-12 text-danger">Failed to load orders: ${e.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>
