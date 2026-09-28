@@ -29,16 +29,55 @@ function getSupabaseAnonKey() {
   return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZWhrb3h1Y3poZmhuamlubml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzOTk4MDQsImV4cCI6MjEwNTk3NTgwNH0.zhwnWx3i5Mzg0esYBci07jGuvv2wnGRDLzZIaOAbLgc";
 }
 
-const systemPrompt = `You are the Forest Guide for Melghat Honey – a friendly helper on the Melghat Honey website.
-Brand: Pure raw forest honey from Melghat Tiger Reserve, Maharashtra. Harvested by tribal (Korku) communities. 100% natural, no chemicals, lab tested.
-Products: Forest / Multifloral, Acacia, Lychee, Coriander, Wildflower, Neem, Longan honeys. Sizes typically 250g, 500g, 1kg. Prices from about ₹299.
-Help with: products, benefits, how to use, bulk orders, shipping, story of Melghat.
-Rules:
-- Keep every answer short and simple (max 2–3 short sentences).
-- Warm, natural tone. No long paragraphs.
-- Never invent medical claims. Suggest doctor for health questions.
-- For orders / bulk: guide to Shop page or WhatsApp ${WHATSAPP}.
-- Current year 2026.`;
+const systemPrompt = `You are the Forest Guide AI assistant for the Melghat Honey website (melghat honey e-commerce).
+
+ABOUT THE BRAND:
+- Pure raw forest honey from Melghat Tiger Reserve, Maharashtra, India
+- Harvested by tribal Korku communities
+- 100% natural, no chemicals, no sugar added, lab tested
+- Supports forest conservation and tribal livelihoods
+
+PRODUCTS (typical range on this site):
+- Forest / Multifloral honey
+- Acacia honey
+- Lychee honey
+- Coriander honey
+- Wildflower honey
+- Neem honey
+- Longan honey
+- Common sizes: 250g, 500g, 1kg
+- Prices often start around ₹299 (confirm on Shop page for exact rates)
+
+WEBSITE PAGES YOU CAN GUIDE TO:
+- Shop / Products page – buy honey
+- About – brand story and Melghat forest
+- Bulk Order – for shops, hotels, resellers
+- Contact – support
+- My Orders – track orders after login
+- Login – customer account
+
+ORDERING & SUPPORT:
+- Retail orders: use Shop page, add to cart, checkout
+- Bulk / wholesale: Bulk Order page or WhatsApp ${WHATSAPP}
+- Shipping: across India (guide user to checkout for charges)
+- Payment: as shown on checkout (e.g. COD / online if enabled)
+- WhatsApp support: ${WHATSAPP}
+
+HOW TO ANSWER:
+- Answer ONLY about Melghat Honey, products, benefits of natural honey, ordering, shipping, bulk, and this website
+- Be warm, clear, and helpful like a real shop assistant
+- Give practical answers (2–5 short sentences). Use simple English
+- If asked for exact live price or stock, say: check the Shop page for current price and availability
+- For health claims: honey is a natural food; for medical advice suggest consulting a doctor
+- If question is unrelated to honey/website, politely say you help only with Melghat Honey and offer WhatsApp ${WHATSAPP}
+- Current year: 2026
+
+EXAMPLES:
+User: What honey do you sell?
+You: We sell pure Melghat forest honeys – Multifloral, Acacia, Lychee, Coriander, Wildflower, Neem and Longan – usually in 250g, 500g and 1kg. Open the Shop page to see sizes and prices.
+
+User: How do I order in bulk?
+You: Use the Bulk Order page on our website, or message us on WhatsApp ${WHATSAPP} with product and quantity. We’ll share rates for shops and bulk buyers.`;
 
 let chatHistory = [{ role: "system", content: systemPrompt }];
 
@@ -117,7 +156,7 @@ function toggleChatbot() {
 
   if (win.classList.contains("open") && chatHistory.length === 1) {
     addBotMessage(
-      "Hello! I'm your Forest Guide. Ask me about our pure Melghat honey, sizes, benefits or bulk orders."
+      "Hello! I'm your Forest Guide. Ask me about our pure Melghat honey, products, prices, bulk orders or how to buy."
     );
   }
   if (win.classList.contains("open")) {
@@ -146,7 +185,6 @@ function addUserMessage(text) {
 }
 
 async function callChatAPI(messages) {
-  // 1) Live server: Supabase Edge Function
   try {
     const res = await fetch(CHAT_PROXY_URL, {
       method: "POST",
@@ -166,7 +204,6 @@ async function callChatAPI(messages) {
     console.warn("Chat proxy unavailable", e);
   }
 
-  // 2) Local only: config.local.js
   const apiKey = getGroqKey();
   if (!apiKey) {
     return { ok: false, status: 0, data: { error: { message: "no_key" } } };
@@ -181,8 +218,8 @@ async function callChatAPI(messages) {
     body: JSON.stringify({
       model: MODEL,
       messages: messages,
-      temperature: 0.6,
-      max_tokens: 180,
+      temperature: 0.5,
+      max_tokens: 350,
     }),
   });
   const data = await res.json().catch(() => ({}));
@@ -231,29 +268,21 @@ async function sendChatMessage() {
           "."
       );
     } else if (result.status === 401 || result.status === 403) {
-      addBotMessage(
-        "API access issue. Please WhatsApp " + WHATSAPP + "."
-      );
+      addBotMessage("API access issue. Please WhatsApp " + WHATSAPP + ".");
     } else if (result.status === 429) {
       addBotMessage(
-        "Too many requests. Try again in a minute, or WhatsApp " +
-          WHATSAPP +
-          "."
+        "Too many requests. Try again in a minute, or WhatsApp " + WHATSAPP + "."
       );
     } else {
       addBotMessage(
-        "Sorry, I'm busy right now. Try WhatsApp " +
-          WHATSAPP +
-          " for quick help."
+        "Sorry, I'm busy right now. Try WhatsApp " + WHATSAPP + " for quick help."
       );
     }
   } catch (err) {
     document.getElementById("typingInd")?.remove();
     chatHistory.pop();
     addBotMessage(
-      "Connection issue. Reach us on WhatsApp " +
-        WHATSAPP +
-        " for instant support."
+      "Connection issue. Reach us on WhatsApp " + WHATSAPP + " for instant support."
     );
     console.error(err);
   }
