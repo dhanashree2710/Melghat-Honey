@@ -1,14 +1,14 @@
 /* Melghat Honey – Forest Guide (Chat Assistant)
    Short, simple answers. Same on every page. Bee icon with animation.
-   API key comes from js/config.local.js (gitignored) */
+   API key comes from js/config.local.js (gitignored — never push this key). */
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const WHATSAPP = "+91 96995 44383";
 
 function getGroqKey() {
-  if (window.MELGHAT_CONFIG && window.MELGHAT_CONFIG.GROQ_API_KEY) {
-    return window.MELGHAT_CONFIG.GROQ_API_KEY;
-  }
-  return "";
+  const key = (window.MELGHAT_CONFIG && window.MELGHAT_CONFIG.GROQ_API_KEY) || "";
+  if (!key || key.includes("YOUR_GROQ") || key.length < 20) return "";
+  return key.trim();
 }
 
 const systemPrompt = `You are the Forest Guide for Melghat Honey – a friendly helper on the Melghat Honey website.
@@ -19,7 +19,7 @@ Rules:
 - Keep every answer short and simple (max 2–3 short sentences).
 - Warm, natural tone. No long paragraphs.
 - Never invent medical claims. Suggest doctor for health questions.
-- For orders / bulk: guide to Shop page or WhatsApp +91 96995 44383.
+- For orders / bulk: guide to Shop page or WhatsApp ${WHATSAPP}.
 - Current year 2026.`;
 
 let chatHistory = [{ role: "system", content: systemPrompt }];
@@ -28,11 +28,14 @@ function ensureChatbotDOM() {
   if (document.getElementById("chatbotWindow")) return;
 
   document.querySelector(".chatbot-toggle")?.remove();
+  document.querySelector(".honey-guide-toggle")?.remove();
 
   const toggle = document.createElement("div");
   toggle.className = "honey-guide-toggle";
   toggle.id = "honeyGuideToggle";
   toggle.title = "Ask Forest Guide";
+  toggle.setAttribute("role", "button");
+  toggle.setAttribute("tabindex", "0");
   toggle.innerHTML = `
     <div class="bee-icon">
       <svg viewBox="0 0 64 64" width="36" height="36" aria-hidden="true">
@@ -52,6 +55,7 @@ function ensureChatbotDOM() {
     <span class="pulse-ring"></span>
   `;
   toggle.onclick = toggleChatbot;
+  toggle.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleChatbot(); } };
   document.body.appendChild(toggle);
 
   const win = document.createElement("div");
@@ -89,7 +93,12 @@ function toggleChatbot() {
   if (toggle) toggle.classList.toggle("open");
 
   if (win.classList.contains("open") && chatHistory.length === 1) {
-    addBotMessage("Hello! I’m your Forest Guide. Ask me about our pure Melghat honey, sizes, benefits or bulk orders.");
+    const hasKey = !!getGroqKey();
+    if (hasKey) {
+      addBotMessage("Hello! I’m your Forest Guide. Ask me about our pure Melghat honey, sizes, benefits or bulk orders.");
+    } else {
+      addBotMessage("Hello! Chat needs a local API key to reply. For now, message us on WhatsApp " + WHATSAPP + " — or add js/config.local.js on this device.");
+    }
   }
   if (win.classList.contains("open")) {
     setTimeout(() => document.getElementById("chatInput")?.focus(), 300);
@@ -101,7 +110,7 @@ function addBotMessage(text) {
   if (!container) return;
   const div = document.createElement("div");
   div.className = "chat-msg bot";
-  div.innerHTML = text;
+  div.textContent = text;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
 }
@@ -124,13 +133,20 @@ async function sendChatMessage() {
 
   const apiKey = getGroqKey();
   if (!apiKey) {
-    addBotMessage("Chat is not configured on this device. Please contact us on WhatsApp +91 96995 44383.");
+    addUserMessage(msg);
+    input.value = "";
+    addBotMessage("Chat is not configured on this device (missing local key). Contact us on WhatsApp " + WHATSAPP + ".");
     return;
   }
 
   addUserMessage(msg);
   input.value = "";
   chatHistory.push({ role: "user", content: msg });
+
+  // Keep history short so requests stay small
+  if (chatHistory.length > 13) {
+    chatHistory = [chatHistory[0], ...chatHistory.slice(-12)];
+  }
 
   const typing = document.createElement("div");
   typing.className = "chat-msg bot typing";
@@ -142,31 +158,47 @@ async function sendChatMessage() {
     const res = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": "Bearer " + apiKey,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
+       model: "openai/gpt-oss-20b",
         messages: chatHistory,
         temperature: 0.6,
         max_tokens: 180
       })
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
     document.getElementById("typingInd")?.remove();
 
-    if (data.choices && data.choices[0]) {
-      const reply = data.choices[0].message.content;
+    if (!res.ok) {
+      console.error("Groq error", res.status, data);
+      const errMsg = (data && data.error && data.error.message) || ("HTTP " + res.status);
+      if (res.status === 401 || res.status === 403) {
+        addBotMessage("API key invalid or expired. Update js/config.local.js, or WhatsApp us at " + WHATSAPP + ".");
+      } else if (res.status === 429) {
+        addBotMessage("Too many requests right now. Try again in a minute, or WhatsApp " + WHATSAPP + ".");
+      } else {
+        addBotMessage("Sorry, I’m busy right now. Try WhatsApp " + WHATSAPP + " for quick help.");
+      }
+      chatHistory.pop(); // remove failed user turn so history stays clean
+      return;
+    }
+
+    if (data.choices && data.choices[0] && data.choices[0].message) {
+      const reply = data.choices[0].message.content || "";
       chatHistory.push({ role: "assistant", content: reply });
       addBotMessage(reply);
     } else {
-      addBotMessage("Sorry, I’m busy right now. Try WhatsApp +91 96995 44383 for quick help.");
+      addBotMessage("Sorry, I’m busy right now. Try WhatsApp " + WHATSAPP + " for quick help.");
+      chatHistory.pop();
     }
   } catch (err) {
     document.getElementById("typingInd")?.remove();
-    addBotMessage("Connection issue. Reach us on WhatsApp for instant support.");
+    addBotMessage("Connection issue. Reach us on WhatsApp " + WHATSAPP + " for instant support.");
     console.error(err);
+    chatHistory.pop();
   }
 }
 

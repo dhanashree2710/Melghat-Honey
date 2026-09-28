@@ -1,2 +1,11 @@
-﻿js/config.local.js
+# Local secrets - never commit API keys
+js/config.local.js
 js/config-local.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/

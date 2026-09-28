@@ -1,0 +1,11 @@
+/* Copy this file to config.local.js and add your own Groq key.
+   config.local.js is gitignored and must never be committed.
+
+   1. Get a key: https://console.groq.com/keys
+   2. Copy:  copy js\config.local.js.example js\config.local.js
+   3. Put your key in config.local.js only
+*/
+
+window.MELGHAT_CONFIG = {
+  GROQ_API_KEY: "PASTE_YOUR_KEY_HERE"
+};
