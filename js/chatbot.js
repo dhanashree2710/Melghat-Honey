@@ -1,14 +1,32 @@
-/* Melghat Honey – Forest Guide (Chat Assistant)
-   Short, simple answers. Same on every page. Bee icon with animation.
-   API key comes from js/config.local.js (gitignored — never push this key). */
+/* Melghat Honey – Forest Guide
+   Live site: Supabase Edge Function (key in Supabase secret only)
+   Local PC: optional config.local.js
+*/
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const CHAT_PROXY_URL =
+  "https://dmehkoxuczhfhnjinniy.supabase.co/functions/v1/chat";
 const WHATSAPP = "+91 96995 44383";
+const MODEL = "openai/gpt-oss-20b";
 
 function getGroqKey() {
-  const key = (window.MELGHAT_CONFIG && window.MELGHAT_CONFIG.GROQ_API_KEY) || "";
-  if (!key || key.includes("YOUR_GROQ") || key.length < 20) return "";
+  const key =
+    (window.MELGHAT_CONFIG && window.MELGHAT_CONFIG.GROQ_API_KEY) || "";
+  if (
+    !key ||
+    key.includes("YOUR_") ||
+    key.includes("PASTE_") ||
+    key.length < 20
+  )
+    return "";
   return key.trim();
+}
+
+function getSupabaseAnonKey() {
+  if (typeof SUPABASE_ANON_KEY !== "undefined" && SUPABASE_ANON_KEY) {
+    return SUPABASE_ANON_KEY;
+  }
+  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtZWhrb3h1Y3poZmhuamlubml5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzOTk4MDQsImV4cCI6MjEwNTk3NTgwNH0.zhwnWx3i5Mzg0esYBci07jGuvv2wnGRDLzZIaOAbLgc";
 }
 
 const systemPrompt = `You are the Forest Guide for Melghat Honey – a friendly helper on the Melghat Honey website.
@@ -55,7 +73,12 @@ function ensureChatbotDOM() {
     <span class="pulse-ring"></span>
   `;
   toggle.onclick = toggleChatbot;
-  toggle.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleChatbot(); } };
+  toggle.onkeydown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleChatbot();
+    }
+  };
   document.body.appendChild(toggle);
 
   const win = document.createElement("div");
@@ -93,12 +116,9 @@ function toggleChatbot() {
   if (toggle) toggle.classList.toggle("open");
 
   if (win.classList.contains("open") && chatHistory.length === 1) {
-    const hasKey = !!getGroqKey();
-    if (hasKey) {
-      addBotMessage("Hello! I’m your Forest Guide. Ask me about our pure Melghat honey, sizes, benefits or bulk orders.");
-    } else {
-      addBotMessage("Hello! Chat needs a local API key to reply. For now, message us on WhatsApp " + WHATSAPP + " — or add js/config.local.js on this device.");
-    }
+    addBotMessage(
+      "Hello! I'm your Forest Guide. Ask me about our pure Melghat honey, sizes, benefits or bulk orders."
+    );
   }
   if (win.classList.contains("open")) {
     setTimeout(() => document.getElementById("chatInput")?.focus(), 300);
@@ -125,25 +145,61 @@ function addUserMessage(text) {
   container.scrollTop = container.scrollHeight;
 }
 
+async function callChatAPI(messages) {
+  // 1) Live server: Supabase Edge Function
+  try {
+    const res = await fetch(CHAT_PROXY_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getSupabaseAnonKey(),
+        apikey: getSupabaseAnonKey(),
+      },
+      body: JSON.stringify({ messages: messages }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.choices) return { ok: true, data };
+    if (res.status !== 404 && res.status !== 503) {
+      return { ok: false, status: res.status, data: data };
+    }
+  } catch (e) {
+    console.warn("Chat proxy unavailable", e);
+  }
+
+  // 2) Local only: config.local.js
+  const apiKey = getGroqKey();
+  if (!apiKey) {
+    return { ok: false, status: 0, data: { error: { message: "no_key" } } };
+  }
+
+  const res = await fetch(GROQ_URL, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + apiKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      messages: messages,
+      temperature: 0.6,
+      max_tokens: 180,
+    }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.ok && data.choices) return { ok: true, data };
+  return { ok: false, status: res.status, data: data };
+}
+
 async function sendChatMessage() {
   const input = document.getElementById("chatInput");
   if (!input) return;
   const msg = input.value.trim();
   if (!msg) return;
 
-  const apiKey = getGroqKey();
-  if (!apiKey) {
-    addUserMessage(msg);
-    input.value = "";
-    addBotMessage("Chat is not configured on this device (missing local key). Contact us on WhatsApp " + WHATSAPP + ".");
-    return;
-  }
-
   addUserMessage(msg);
   input.value = "";
   chatHistory.push({ role: "user", content: msg });
 
-  // Keep history short so requests stay small
   if (chatHistory.length > 13) {
     chatHistory = [chatHistory[0], ...chatHistory.slice(-12)];
   }
@@ -155,50 +211,51 @@ async function sendChatMessage() {
   document.getElementById("chatMessages")?.appendChild(typing);
 
   try {
-    const res = await fetch(GROQ_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + apiKey,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-       model: "openai/gpt-oss-20b",
-        messages: chatHistory,
-        temperature: 0.6,
-        max_tokens: 180
-      })
-    });
-
-    const data = await res.json().catch(() => ({}));
+    const result = await callChatAPI(chatHistory);
     document.getElementById("typingInd")?.remove();
 
-    if (!res.ok) {
-      console.error("Groq error", res.status, data);
-      const errMsg = (data && data.error && data.error.message) || ("HTTP " + res.status);
-      if (res.status === 401 || res.status === 403) {
-        addBotMessage("API key invalid or expired. Update js/config.local.js, or WhatsApp us at " + WHATSAPP + ".");
-      } else if (res.status === 429) {
-        addBotMessage("Too many requests right now. Try again in a minute, or WhatsApp " + WHATSAPP + ".");
-      } else {
-        addBotMessage("Sorry, I’m busy right now. Try WhatsApp " + WHATSAPP + " for quick help.");
-      }
-      chatHistory.pop(); // remove failed user turn so history stays clean
+    if (result.ok && result.data.choices && result.data.choices[0]) {
+      const reply = result.data.choices[0].message.content || "";
+      chatHistory.push({ role: "assistant", content: reply });
+      addBotMessage(reply);
       return;
     }
 
-    if (data.choices && data.choices[0] && data.choices[0].message) {
-      const reply = data.choices[0].message.content || "";
-      chatHistory.push({ role: "assistant", content: reply });
-      addBotMessage(reply);
+    console.error("Chat error", result.status, result.data);
+    chatHistory.pop();
+
+    if (result.data && result.data.error && result.data.error.message === "no_key") {
+      addBotMessage(
+        "Chat is not ready on the server yet. Contact us on WhatsApp " +
+          WHATSAPP +
+          "."
+      );
+    } else if (result.status === 401 || result.status === 403) {
+      addBotMessage(
+        "API access issue. Please WhatsApp " + WHATSAPP + "."
+      );
+    } else if (result.status === 429) {
+      addBotMessage(
+        "Too many requests. Try again in a minute, or WhatsApp " +
+          WHATSAPP +
+          "."
+      );
     } else {
-      addBotMessage("Sorry, I’m busy right now. Try WhatsApp " + WHATSAPP + " for quick help.");
-      chatHistory.pop();
+      addBotMessage(
+        "Sorry, I'm busy right now. Try WhatsApp " +
+          WHATSAPP +
+          " for quick help."
+      );
     }
   } catch (err) {
     document.getElementById("typingInd")?.remove();
-    addBotMessage("Connection issue. Reach us on WhatsApp " + WHATSAPP + " for instant support.");
-    console.error(err);
     chatHistory.pop();
+    addBotMessage(
+      "Connection issue. Reach us on WhatsApp " +
+        WHATSAPP +
+        " for instant support."
+    );
+    console.error(err);
   }
 }
 
