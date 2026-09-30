@@ -97,6 +97,12 @@
       margin-bottom: 12px;
       padding-left: 4px;
     }
+    .unit-price-hint {
+      font-size: 0.8rem;
+      color: #9a8b7a;
+      margin-top: 6px;
+    }
+    .unit-price-hint strong { color: #c9a227; }
     @media (max-width: 768px) {
       .form-panel { padding: 24px 18px; }
       .bulk-hero { min-height: 34vh; }
@@ -205,13 +211,13 @@
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Select Product *</label>
-                  <select class="form-select" id="bulkProduct" required>
-                    <option value="">Choose a product</option>
-                    <option value="Forest Honey">Forest Honey</option>
-                    <option value="Probiotic Honey">Probiotic Honey</option>
-                    <option value="Herbal Honey">Herbal Honey</option>
-                    <option value="Mixed / Assorted">Mixed / Assorted</option>
+                  <select class="form-select" id="bulkProduct" required onchange="showUnitPrice()">
+                    <option value="">Loading products...</option>
                   </select>
+                  <div class="unit-price-hint" id="unitPriceHint" style="display:none">
+                    Unit price: <strong id="unitPriceValue">—</strong>
+                    <span class="text-muted"> (bulk discount available on 10+ units)</span>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <label class="form-label fw-semibold">Quantity (units) *</label>
@@ -323,5 +329,98 @@
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    let productList = [];   // full products from DB
+
+    // Load products from database and fill the select
+    async function loadBulkProducts() {
+      const select = document.getElementById("bulkProduct");
+      select.innerHTML = '<option value="">Loading products...</option>';
+
+      try {
+        const rows = await sbGet("products", "is_active=eq.true&select=id,name,size,price,image_url&order=name.asc");
+        productList = rows || [];
+
+        if (!productList.length) {
+          select.innerHTML = '<option value="">No products available</option>';
+          return;
+        }
+
+        let options = '<option value="">Choose a product</option>';
+        productList.forEach(p => {
+          const label = `${p.name} (${p.size || ""}) — ₹${Number(p.price).toFixed(0)} / unit`;
+          options += `<option value="${p.name}" data-price="${p.price}" data-size="${p.size || ""}">${label}</option>`;
+        });
+        // Extra option for mixed
+        options += `<option value="Mixed / Assorted" data-price="0" data-size="">Mixed / Assorted — ask for quote</option>`;
+        select.innerHTML = options;
+      } catch (e) {
+        console.error(e);
+        select.innerHTML = `
+          <option value="">Could not load products</option>
+          <option value="Forest Honey">Forest Honey</option>
+          <option value="Probiotic Honey">Probiotic Honey</option>
+          <option value="Herbal Honey">Herbal Honey</option>
+          <option value="Mixed / Assorted">Mixed / Assorted</option>
+        `;
+      }
+    }
+
+    function showUnitPrice() {
+      const select = document.getElementById("bulkProduct");
+      const opt = select.options[select.selectedIndex];
+      const hint = document.getElementById("unitPriceHint");
+      const val = document.getElementById("unitPriceValue");
+
+      if (!opt || !opt.value || opt.value === "Mixed / Assorted") {
+        hint.style.display = "none";
+        return;
+      }
+      const price = opt.getAttribute("data-price");
+      if (price && Number(price) > 0) {
+        val.textContent = "₹" + Number(price).toFixed(0);
+        hint.style.display = "block";
+      } else {
+        hint.style.display = "none";
+      }
+    }
+
+    // Original submit function (kept intact, just uses the selected product name)
+    function submitBulk(e) {
+      e.preventDefault();
+      const name = document.getElementById("bulkName").value.trim();
+      const phone = document.getElementById("bulkPhone").value.trim();
+      const email = document.getElementById("bulkEmail").value.trim();
+      const company = document.getElementById("bulkCompany").value.trim();
+      const product = document.getElementById("bulkProduct").value;
+      const qty = document.getElementById("bulkQty").value;
+      const msg = document.getElementById("bulkMsg").value.trim();
+
+      if (!name || !phone || !product || !qty) {
+        alert("Please fill all required fields.");
+        return;
+      }
+
+      // Get unit price for the message
+      const opt = document.getElementById("bulkProduct").options[document.getElementById("bulkProduct").selectedIndex];
+      const unitPrice = opt.getAttribute("data-price") || "—";
+      const size = opt.getAttribute("data-size") || "";
+
+      let text = `*Bulk Order Request – Melghat Honey*%0A%0A`;
+      text += `*Name:* ${name}%0A`;
+      text += `*Phone:* ${phone}%0A`;
+      if (email) text += `*Email:* ${email}%0A`;
+      if (company) text += `*Company:* ${company}%0A`;
+      text += `*Product:* ${product}${size ? " (" + size + ")" : ""}%0A`;
+      text += `*Unit Price:* ₹${unitPrice}%0A`;
+      text += `*Quantity:* ${qty} units%0A`;
+      if (msg) text += `*Message:* ${msg}%0A`;
+
+      window.open(`https://wa.me/919699544383?text=${text}`, "_blank");
+    }
+
+    // Load products when page is ready
+    document.addEventListener("DOMContentLoaded", loadBulkProducts);
+  </script>
 </body>
 </html>

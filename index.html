@@ -11,11 +11,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
   <style>
-    /* ========== HERO ========== */
     .home-hero {
       min-height: 88vh;
       background: linear-gradient(rgba(30,50,30,0.55), rgba(50,30,20,0.72)),
-                  url('images/deu0p.jpg') center/cover no-repeat;
+                  url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&q=80') center/cover no-repeat;
       display: flex; align-items: center; position: relative; overflow: hidden;
     }
     .home-hero .hero-content {
@@ -29,8 +28,6 @@
     .home-hero .subtext {
       font-size: 1.15rem; letter-spacing: 1.5px; margin-bottom: 1.8rem; opacity: 0.95;
     }
-
-    /* ========== TRUST BAR ========== */
     .trust-bar {
       background: #fff;
       margin-top: -40px; position: relative; z-index: 3;
@@ -38,65 +35,236 @@
       padding: 28px 16px; border: 1px solid rgba(244,180,0,0.15);
     }
     .trust-item { text-align: center; padding: 8px; }
-    .trust-item i { font-size: 1.6rem; color: var(--honey-gold); margin-bottom: 8px; display: block; }
-    .trust-item h6 { font-weight: 700; color: var(--dark-brown); margin-bottom: 4px; font-size: 0.95rem; }
+    .trust-item i { font-size: 1.6rem; color: var(--honey-gold,#f4b400); margin-bottom: 8px; display: block; }
+    .trust-item h6 { font-weight: 700; color: var(--dark-brown,#4e342e); margin-bottom: 4px; font-size: 0.95rem; }
     .trust-item p { font-size: 0.8rem; color: #888; margin: 0; }
 
-    /* ========== STORY SECTION ========== */
     .story-section {
-      padding: 80px 0;
-      background: linear-gradient(180deg, #faf6ee 0%, #fff 100%);
+      padding: 90px 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(244,180,0,0.12), transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(46,125,50,0.08), transparent 45%),
+        linear-gradient(180deg, #faf6ee 0%, #fff 55%, #f9f5ed 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .story-section .bee-float {
+      position: absolute;
+      font-size: 1.4rem;
+      opacity: 0.35;
+      animation: beeDrift 12s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+      color: #c9a227;
+    }
+    .story-section .bee-float.b2 { animation-delay: -4s; font-size: 1.1rem; opacity: 0.25; }
+    .story-section .bee-float.b3 { animation-delay: -7s; font-size: 1.6rem; opacity: 0.2; }
+    @keyframes beeDrift {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(18px, -12px) rotate(8deg); }
+      50% { transform: translate(-10px, 8px) rotate(-5deg); }
+      75% { transform: translate(12px, 14px) rotate(4deg); }
+    }
+    .story-visual {
+      position: relative;
+      z-index: 1;
     }
     .story-card {
       position: relative;
-      border-radius: 24px;
+      border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(78,52,46,0.18);
-      background: #fff;
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow:
+        0 25px 60px rgba(78,52,46,0.2),
+        0 0 0 1px rgba(244,180,0,0.15);
+      background: #1a120f;
+      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s;
     }
-    .story-card:hover { transform: translateY(-8px); }
+    .story-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.15);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .story-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 32px 70px rgba(78,52,46,0.28), 0 0 0 1px rgba(244,180,0,0.35);
+    }
     .story-main-img {
       width: 100%;
-      height: 420px;
+      height: 440px;
       object-fit: cover;
+      object-position: center;
       display: block;
-      transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.75s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .story-card:hover .story-main-img { transform: scale(1.06); }
+    .story-main-img.story-fade-out { opacity: 0; }
+    .story-dots {
+      display: flex; gap: 8px; justify-content: center; margin-top: 14px;
+      position: relative; z-index: 1;
+    }
+    .story-dots button {
+      width: 9px; height: 9px; border-radius: 50%; border: none;
+      background: #d7c4a3; padding: 0; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .story-dots button.active {
+      background: #f4b400; width: 22px; border-radius: 6px;
+    }
+    .story-card:hover .story-main-img { transform: scale(1.05); }
     .story-overlay {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,0.55));
-      padding: 30px 24px 20px;
+      background: linear-gradient(transparent 10%, rgba(20,12,8,0.75) 100%);
+      padding: 40px 28px 24px;
       color: #fff;
+      z-index: 2;
+    }
+    .story-overlay h5 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .story-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(244,180,0,0.9);
+      color: #3e2723;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .story-float-chip {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 4;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #4e342e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: chipPulse 3s ease-in-out infinite;
+    }
+    .story-float-chip i { color: #2e7d32; }
+    @keyframes chipPulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
     .mini-product-row {
       display: flex;
-      gap: 14px;
-      margin-top: 22px;
+      gap: 12px;
+      margin-top: 20px;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
-    .mini-product-row img {
-      width: 86px;
-      height: 86px;
-      object-fit: cover;
-      border-radius: 16px;
+    .mini-product-row .mini-thumb {
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
       border: 3px solid #fff;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: all 0.35s ease;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+      overflow: hidden;
+      background: #faf6ee;
       cursor: pointer;
+      transition: all 0.35s ease;
+      position: relative;
     }
-    .mini-product-row img:hover {
-      transform: translateY(-6px) scale(1.08);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.22);
+    .mini-product-row .mini-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .mini-product-row .mini-thumb:hover {
+      transform: translateY(-8px) scale(1.06);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.22);
+      border-color: #f4b400;
+    }
+    .story-copy {
+      position: relative;
+      z-index: 1;
+    }
+    .story-copy .promise-label {
+      display: inline-block;
+      background: linear-gradient(90deg, #f4b400, #e6a800);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .story-copy h2 {
+      color: var(--dark-brown, #4e342e);
+      font-size: clamp(1.9rem, 4vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .story-copy h2 .accent {
+      color: #c9a227;
+      position: relative;
+    }
+    .check-list li {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+    }
+    .check-list .check-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 14px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(46,125,50,0.15);
+      transition: transform 0.3s;
+    }
+    .check-list li:hover .check-icon { transform: scale(1.1); }
+    .check-list .check-icon i { color: #2e7d32; }
+    .story-btns .btn-order {
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-weight: 600;
+      box-shadow: 0 8px 22px rgba(244,180,0,0.35);
+    }
+    .story-btns .btn-outline-story {
+      border-radius: 50px;
+      padding: 12px 28px;
+      border: 2px solid #c9a227;
+      color: #4e342e;
+      font-weight: 600;
+      background: transparent;
+      transition: all 0.3s;
+    }
+    .story-btns .btn-outline-story:hover {
+      background: #f4b400;
+      border-color: #f4b400;
+      color: #3e2723;
     }
 
-    /* ========== FEATURED COLLECTION (Replaces Carousel) ========== */
-    .featured-collection {
-      padding: 80px 0;
-      background: #fff;
-    }
+    .featured-collection { padding: 80px 0; background: #fff; }
     .featured-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -122,9 +290,7 @@
       padding: 20px;
       transition: transform 0.6s ease;
     }
-    .featured-item:hover img {
-      transform: scale(1.08);
-    }
+    .featured-item:hover img { transform: scale(1.08); }
     .featured-item .overlay {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -149,14 +315,11 @@
       opacity: 0.9;
       margin: 0;
     }
-
-    /* Grid sizes */
     .featured-item.large { grid-column: span 6; height: 380px; }
     .featured-item.medium { grid-column: span 3; height: 380px; }
     .featured-item.wide { grid-column: span 4; height: 280px; }
     .featured-item.small { grid-column: span 4; height: 280px; }
 
-    /* ========== AUTO SCROLLING MARQUEE ========== */
     .marquee-section {
       padding: 50px 0;
       background: linear-gradient(90deg, #faf6ee, #fff8e7, #faf6ee);
@@ -168,9 +331,7 @@
       animation: marquee 40s linear infinite;
       width: max-content;
     }
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
+    .marquee-track:hover { animation-play-state: paused; }
     .marquee-item {
       width: 220px;
       height: 220px;
@@ -184,21 +345,17 @@
       flex-shrink: 0;
       transition: transform 0.3s ease;
     }
-    .marquee-item:hover {
-      transform: scale(1.05);
-    }
+    .marquee-item:hover { transform: scale(1.05); }
     .marquee-item img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
-
     @keyframes marquee {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    /* ========== PRODUCT CARDS ========== */
     .product-card .product-img-wrap {
       height: 260px; overflow: hidden; background: #faf6ee;
       display: flex; align-items: center; justify-content: center;
@@ -207,24 +364,100 @@
       width: 100%; height: 100%; object-fit: contain; padding: 12px;
     }
 
-    /* Animations */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(25px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Responsive */
+    /* Loved by Nature — marketing gallery (clear cards) */
+    .lifestyle-section {
+      background: linear-gradient(180deg, #faf6ee 0%, #ffffff 100%);
+    }
+    .nature-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .nature-card {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(78,52,46,0.1);
+      border: 1px solid rgba(244,180,0,0.2);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .nature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(78,52,46,0.16);
+    }
+    .nature-card .img-box {
+      height: 260px;
+      background: #faf6ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .nature-card .img-box img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+    .nature-card.wide {
+      grid-column: span 2;
+    }
+    .nature-card.wide .img-box { height: 300px; }
+    .nature-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: #888;
+      padding: 40px;
+    }
+
     @media (max-width: 991px) {
       .featured-item.large,
       .featured-item.medium { grid-column: span 6; height: 320px; }
       .featured-item.wide,
       .featured-item.small { grid-column: span 6; height: 260px; }
-      .story-main-img { height: 340px; }
+      .story-main-img {
+      transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .story-main-img.story-fade-out { opacity: 0; }
+    .story-dots {
+      display: flex; gap: 8px; justify-content: center; margin-top: 14px;
+      position: relative; z-index: 1;
+    }
+    .story-dots button {
+      width: 9px; height: 9px; border-radius: 50%; border: none;
+      background: #d7c4a3; padding: 0; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .story-dots button.active {
+      background: #f4b400; width: 22px; border-radius: 6px;
+    }
     }
     @media (max-width: 768px) {
       .home-hero { min-height: 72vh; }
       .trust-bar { margin-top: -28px; padding: 18px 10px; }
-      .story-main-img { height: 280px; }
+      .story-main-img {
+      transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .story-main-img.story-fade-out { opacity: 0; }
+    .story-dots {
+      display: flex; gap: 8px; justify-content: center; margin-top: 14px;
+      position: relative; z-index: 1;
+    }
+    .story-dots button {
+      width: 9px; height: 9px; border-radius: 50%; border: none;
+      background: #d7c4a3; padding: 0; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .story-dots button.active {
+      background: #f4b400; width: 22px; border-radius: 6px;
+    }
       .featured-item.large,
       .featured-item.medium,
       .featured-item.wide,
@@ -233,149 +466,61 @@
         height: 280px;
       }
       .marquee-item { width: 160px; height: 160px; }
+      .nature-gallery { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .nature-card.wide { grid-column: span 2; }
+      .nature-card .img-box { height: 220px; }
+      .nature-card.wide .img-box { height: 240px; }
     }
-    /* ========== LIFESTYLE GALLERY (Loved by Nature Lovers) ========== */
-.lifestyle-section {
-  background: #faf8f5;
-}
-
-.lifestyle-card {
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  height: 320px;
-  box-shadow: 0 10px 30px rgba(78, 52, 46, 0.12);
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  cursor: pointer;
-}
-
-.lifestyle-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 45px rgba(78, 52, 46, 0.2);
-}
-
-.lifestyle-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  transition: transform 0.6s ease;
-  display: block;
-}
-
-.lifestyle-card:hover img {
-  transform: scale(1.1);
-}
-
-.lifestyle-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(40, 25, 15, 0.75));
-  color: #fff;
-  padding: 25px 18px 18px;
-  opacity: 0;
-  transform: translateY(15px);
-  transition: all 0.4s ease;
-}
-
-.lifestyle-card:hover .lifestyle-overlay {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.lifestyle-overlay span {
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: 0.3px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .lifestyle-card {
-    height: 240px;
-  }
-  .lifestyle-overlay span {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .lifestyle-card {
-    height: 200px;
-  }
-}
+    @media (max-width: 576px) {
+      .nature-gallery { grid-template-columns: 1fr; }
+      .nature-card.wide { grid-column: span 1; }
+      .nature-card .img-box { height: 220px; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-<!-- NAVBAR (consistent with all other pages) -->
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container">
     <a class="navbar-brand" href="index.html" title="Melghat Honey">
       <img src="images/logo.png" alt="Melghat Honey" class="brand-logo" onerror="this.style.display='none'">
     </a>
-
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
       <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="about.html">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="products.html">Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="bulk-order.html">Bulk Order</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
+        <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="bulk-order.html">Bulk Order</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
-
       <div class="d-flex align-items-center gap-3">
-        <!-- Search -->
         <div class="header-search" id="headerSearch">
-          <input type="search" id="globalSearchInput" placeholder="Search honey..." 
+          <input type="search" id="globalSearchInput" placeholder="Search honey..."
                  onkeydown="if(event.key==='Enter'){goSearch();}">
           <a href="#" class="search-toggle nav-icon-btn" onclick="toggleHeaderSearch(event)" title="Search">
             <i class="fas fa-search"></i>
           </a>
         </div>
-
-        <!-- My Orders -->
         <a href="my-orders.html" class="nav-icon-btn nav-icon-orders" title="My Orders">
           <i class="fas fa-clipboard-list"></i>
         </a>
-
-        <!-- Cart -->
-        <a href="#" class="nav-icon-btn nav-icon-cart position-relative" 
+        <a href="#" class="nav-icon-btn nav-icon-cart position-relative"
            onclick="openCartModal(); return false;" title="Cart">
           <i class="fas fa-shopping-cart"></i>
           <span id="cartBadge" class="cart-badge" style="display:none">0</span>
         </a>
-
-        <!-- Login / Account -->
         <a href="login.html" class="nav-icon-btn nav-icon-login" title="Login / Account">
           <i class="fas fa-user-circle"></i>
         </a>
-
-        <!-- Shop Now Button -->
         <a href="products.html" class="btn btn-order">Shop Now</a>
       </div>
     </div>
   </div>
 </nav>
 
-  <!-- HERO -->
   <section class="home-hero">
     <div class="container hero-content">
       <p class="text-uppercase mb-2" style="letter-spacing:3px;font-size:0.85rem;color:#f4b400">Melghat Tiger Reserve</p>
@@ -388,161 +533,96 @@
     </div>
   </section>
 
-  <!-- TRUST BAR -->
   <div class="container">
     <div class="trust-bar fade-in">
       <div class="row g-2">
-        <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-leaf"></i><h6>100% Natural</h6><p>Raw & unprocessed</p></div></div>
-        <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-flask"></i><h6>No Preservatives</h6><p>Enzymes & antioxidants</p></div></div>
+        <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-leaf"></i><h6>100% Natural</h6><p>Raw &amp; unprocessed</p></div></div>
+        <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-flask"></i><h6>No Preservatives</h6><p>Enzymes &amp; antioxidants</p></div></div>
         <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-hands-helping"></i><h6>Tribal Sourced</h6><p>Fair trade livelihoods</p></div></div>
         <div class="col-6 col-md-3"><div class="trust-item"><i class="fas fa-vial"></i><h6>Lab Tested</h6><p>Purity assured</p></div></div>
       </div>
     </div>
   </div>
 
-  <!-- STORY SECTION -->
   <section class="story-section">
+    <span class="bee-float" style="top:12%;left:6%">✦</span>
+    <span class="bee-float b2" style="top:40%;right:8%">✦</span>
+    <span class="bee-float b3" style="bottom:18%;left:15%">✦</span>
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6">
-          <div class="story-card">
-            <img src="images/Gemini_Generated_Image_gm9mxigm9mxigm9m.png" alt="Melghat Honey" class="story-main-img" id="storyMainImg">
-            <div class="story-overlay">
-              <h5>Straight from the Forest</h5>
-              <p class="mb-0 small opacity-90">Wild · Raw · Untouched</p>
+          <div class="story-visual">
+            <div class="story-card">
+              <div class="story-float-chip"><i class="fas fa-leaf"></i> 100% Forest Origin</div>
+              <img src="images/product-mockups/Gemini_Generated_Image_l2jwr5l2jwr5l2jw.png" alt="Melghat Honey" class="story-main-img" id="storyMainImg">
+              <div class="story-overlay">
+                <span class="story-badge-pill"><i class="fas fa-tree"></i> Melghat Tiger Reserve</span>
+                <h5>Straight from the Forest</h5>
+                <p class="mb-0 small opacity-90">Wild · Raw · Untouched</p>
+              </div>
             </div>
+            <div class="mini-product-row" id="miniProductRow"></div>
+            <div class="story-dots" id="storyDots" aria-label="Image slideshow"></div>
           </div>
-          <div class="mini-product-row" id="miniProductRow"></div>
         </div>
         <div class="col-lg-6">
-          <p class="text-uppercase fw-semibold mb-2" style="color:var(--honey-gold);letter-spacing:2px;font-size:0.85rem">Our Promise</p>
-          <h2 class="fw-bold mb-3" style="color:var(--dark-brown);font-size:2.4rem;">Nature in Every Drop</h2>
-          <p class="text-muted mb-4" style="font-size:1.08rem;line-height:1.7">
-            From the wild forests of Melghat to your home — pure, raw honey harvested by tribal communities, rich in enzymes and antioxidants.
-          </p>
-          <ul class="list-unstyled mb-4">
-            <li class="mb-3 d-flex align-items-center">
-              <span class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:#e8f5e9">
-                <i class="fas fa-check text-success"></i>
-              </span>
-              <span class="fw-medium">100% Natural & Raw</span>
-            </li>
-            <li class="mb-3 d-flex align-items-center">
-              <span class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:#e8f5e9">
-                <i class="fas fa-check text-success"></i>
-              </span>
-              <span class="fw-medium">Tribal Fair Trade</span>
-            </li>
-            <li class="mb-3 d-flex align-items-center">
-              <span class="me-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width:36px;height:36px;background:#e8f5e9">
-                <i class="fas fa-check text-success"></i>
-              </span>
-              <span class="fw-medium">Lab Tested Purity</span>
-            </li>
-          </ul>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="products.html" class="btn btn-order px-4 py-2">Explore Products</a>
-            <a href="about.html" class="btn btn-outline-secondary px-4 py-2" style="border-radius:50px">Our Story</a>
+          <div class="story-copy">
+            <div class="promise-label">Our Promise</div>
+            <h2>Nature in Every <span class="accent">Drop</span></h2>
+            <p class="text-muted mb-4" style="font-size:1.08rem;line-height:1.75">
+              From the wild forests of Melghat to your home — pure, raw honey harvested by tribal communities, rich in enzymes and antioxidants.
+            </p>
+            <ul class="list-unstyled check-list mb-4">
+              <li>
+                <span class="check-icon"><i class="fas fa-check"></i></span>
+                <span class="fw-medium">100% Natural &amp; Raw</span>
+              </li>
+              <li>
+                <span class="check-icon"><i class="fas fa-check"></i></span>
+                <span class="fw-medium">Tribal Fair Trade</span>
+              </li>
+              <li>
+                <span class="check-icon"><i class="fas fa-check"></i></span>
+                <span class="fw-medium">Lab Tested Purity</span>
+              </li>
+            </ul>
+            <div class="d-flex flex-wrap gap-3 story-btns">
+              <a href="products.html" class="btn btn-order">Explore Products</a>
+              <a href="about.html" class="btn btn-outline-story">Our Story</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== FEATURED COLLECTION (Replaces Carousel) ========== -->
   <section class="featured-collection">
     <div class="container">
       <div class="section-title text-center mb-5">
         <h2>Our Signature Collection</h2>
         <p class="text-muted">Handcrafted by nature, harvested by tribal communities</p>
       </div>
-
-      <div class="featured-grid" id="featuredGrid">
-        <!-- Filled by JavaScript from database / fallbacks -->
-      </div>
+      <div class="featured-grid" id="featuredGrid"></div>
     </div>
   </section>
 
-  <!-- ========== AUTO SCROLLING MARQUEE ========== -->
   <section class="marquee-section">
-    <div class="marquee-track" id="marqueeTrack">
-      <!-- Duplicated for seamless loop -->
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </section>
+
+  <section class="lifestyle-section py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="text-uppercase fw-semibold mb-2" style="color:var(--honey-gold,#f4b400);letter-spacing:2px;font-size:0.85rem">Gallery</p>
+        <h2 class="fw-bold" style="color: var(--dark-brown,#4e342e);">Loved by Nature Lovers</h2>
+        <p class="text-muted mt-2">Moments from Melghat — pure honey &amp; wild forests</p>
+      </div>
+      <div class="nature-gallery" id="lifestyleGrid">
+        <div class="nature-empty">Loading gallery…</div>
+      </div>
     </div>
   </section>
 
-  <!-- ========== LOVED BY NATURE LOVERS (Fixed & Attractive) ========== -->
-<section class="lifestyle-section py-5" style="background: #faf8f5;">
-  <div class="container">
-    <div class="text-center mb-5">
-      <h2 class="fw-bold" style="color: var(--dark-brown);">Loved by Nature Lovers</h2>
-      <p class="text-muted mt-2">Real moments with pure Melghat Honey</p>
-    </div>
-
-    <div class="row g-4" id="lifestyleGrid">
-      <!-- Card 1 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A1610.jpg" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Pure Melghat Honey</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A1894.jpg" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Natural Goodness</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A2066.jpg" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Everyday Wellness</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A2107.JPG" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Healthy Lifestyle</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A2518.jpg" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Traditional Touch</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="col-6 col-md-4">
-        <div class="lifestyle-card">
-          <img src="images/0K9A2139.JPG" alt="Melghat Honey" loading="lazy">
-          <div class="lifestyle-overlay">
-            <span>Joy of Nature</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <!-- PRODUCTS PREVIEW -->
   <section class="products-section py-5">
     <div class="container">
       <div class="section-title text-center mb-5">
@@ -556,18 +636,15 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-5" style="background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff">
     <div class="container text-center">
       <h2 class="mb-3">Ready for Pure Forest Goodness?</h2>
-      <p class="mb-4 opacity-90">Order now or request bulk pricing for retail & distribution</p>
+      <p class="mb-4 opacity-90">Order now or request bulk pricing for retail &amp; distribution</p>
       <a href="products.html" class="btn btn-shop btn-lg me-2">Shop Retail</a>
       <a href="bulk-order.html" class="btn btn-bulk btn-lg">Bulk Enquiry</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
- 
   <footer>
     <div class="container">
       <div class="row g-4">
@@ -605,22 +682,8 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/919699544383?text=Hello%20Melghat%20Honey!" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-  <div class="modal fade" id="cartModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body" id="cartModalBody"></div>
-      </div>
-    </div>
-  </div>
+  <a href="https://wa.me/919699544383?text=Hello%20Melghat%20Honey!" class="whatsapp-float" target="_blank" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
-  <a href="https://wa.me/919699544383" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
-  <!-- Modals (Cart + Add to Cart) -->
   <div class="modal fade" id="cartModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -641,7 +704,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body text-center">
-          <img id="modalProductImg" src="" class="rounded mb-3" style="width:120px;height:120px;object-fit:contain;background:#faf6ee">
+          <img id="modalProductImg" src="" class="rounded mb-3" style="width:120px;height:120px;object-fit:contain;background:#faf6ee" alt="">
           <h5 id="modalProductName"></h5>
           <select id="modalSizeSelect" class="form-select my-3" onchange="changeModalSize()"></select>
           <div class="d-flex justify-content-center align-items-center gap-3 my-3">
@@ -662,125 +725,242 @@
   <script src="js/supabase-config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
   <script src="js/config.local.js" onerror="window.MELGHAT_CONFIG=window.MELGHAT_CONFIG||{}"></script>
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
 
   <script>
-    // High quality AI product images (fallback)
-    const AI_IMAGES = [
-      { name: "Acacia Honey", image: "images/raw7-acacia.png", desc: "Light • Mild • Naturally Pure" },
-      { name: "Lychee Honey", image: "images/raw7-lychee.png", desc: "Delicate floral notes" },
-      { name: "Coriander Honey", image: "images/raw7-coriander.png", desc: "Unique herbal notes" },
-      { name: "Multifloral Honey", image: "images/kshetra-multifloral.png", desc: "Rich aromatic blend" },
-      { name: "Wild Melghat Honey", image: "images/melghat-pure-wild.png", desc: "Forest of Untouched Sweetness" },
-      { name: "Neem Honey", image: "images/kshetra-neem.png", desc: "Kshetra Nature's Best" },
-      { name: "Longan Honey", image: "images/melgaht-longan-forest.png", desc: "Pure & Natural" },
-      { name: "Wildflower Honey", image: "images/melgaht-wildflower.png", desc: "Classic pure sweetness" }
-    ];
+    const FALLBACK_IMG = "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800";
 
     function pickProductImage(p) {
-      if (p.image && p.image.trim()) return p.image;
-      if (p.image_url && p.image_url.trim()) return p.image_url;
-      return "images/melghat-pure-wild.png";
+      if (!p) return FALLBACK_IMG;
+      const candidates = [p.image, p.image_url];
+      if (p.variants && p.variants.length) {
+        const v = p.variants.find(x => x && x.image_url) || p.variants[0];
+        if (v && v.image_url) candidates.push(v.image_url);
+      }
+      for (const u of candidates) {
+        if (u && String(u).trim() && String(u) !== "null") return String(u).trim();
+      }
+      return FALLBACK_IMG;
+    }
+
+    function money(n) {
+      if (typeof formatPrice === "function") return formatPrice(n);
+      return "₹" + Number(n || 0).toLocaleString("en-IN");
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // Load from database
-      if (typeof loadStoreProducts === "function") {
-        await loadStoreProducts();
-      }
+      try {
+        if (typeof loadStoreProducts === "function") await loadStoreProducts();
+      } catch (e) { console.warn(e); }
 
       let productList = [];
-
-      // Prefer real DB products
       if (typeof products !== "undefined" && products && products.length) {
         productList = products.map(p => ({
           id: p.id,
           name: p.name,
           short_desc: p.short_desc || p.description || "",
           image: pickProductImage(p),
-          price: p.minPrice || p.price || 499,
+          price: p.minPrice || Object.values(p.sizes || {})[0] || p.price || 499,
           sizes: p.sizes || {},
           is_featured: p.is_featured
         }));
       }
 
-      // Fallback to AI images if DB empty
-      if (!productList.length) {
-        productList = AI_IMAGES.map((item, i) => ({
-          id: "ai" + i,
-          name: item.name,
-          short_desc: item.desc,
-          image: item.image,
-          price: 499 + (i * 50),
-          is_featured: i < 4
-        }));
-      }
+      // Story main image — auto-rotate marketing images
+      (async function startStorySlideshow() {
+        const imgEl = document.getElementById("storyMainImg");
+        const dotsEl = document.getElementById("storyDots");
+        if (!imgEl) return;
 
-      // ========== FEATURED GRID ==========
+        let urls = [];
+        try {
+          if (typeof fetchMarketingImages === "function") {
+            const mkt = await fetchMarketingImages();
+            urls = (mkt || []).map(m => m.url).filter(Boolean);
+          }
+        } catch (e) {}
+
+        if (!urls.length && typeof SUPABASE_URL !== "undefined") {
+          try {
+            const res = await fetch(SUPABASE_URL + "/storage/v1/object/list/marketing-images", {
+              method: "POST",
+              headers: {
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ prefix: "", limit: 30 })
+            });
+            const files = await res.json();
+            if (Array.isArray(files)) {
+              urls = files
+                .filter(f => f.name && f.id != null && /\.(png|jpe?g|webp|gif)$/i.test(f.name))
+                .map(f => SUPABASE_URL + "/storage/v1/object/public/marketing-images/" + f.name);
+            }
+          } catch (e) {}
+        }
+
+        if (urls.length < 2) {
+          productList.forEach(p => { if (p.image) urls.push(p.image); });
+        }
+        urls = [...new Set(urls)];
+        if (!urls.length) return;
+
+        let idx = 0;
+        imgEl.src = urls[0];
+
+        if (dotsEl && urls.length > 1) {
+          dotsEl.innerHTML = urls.map((_, i) =>
+            `<button type="button" class="${i === 0 ? "active" : ""}" data-i="${i}" aria-label="Slide ${i + 1}"></button>`
+          ).join("");
+          dotsEl.querySelectorAll("button").forEach(btn => {
+            btn.addEventListener("click", () => {
+              idx = Number(btn.dataset.i) || 0;
+              show(idx);
+              restart();
+            });
+          });
+        }
+
+        function show(i) {
+          idx = i;
+          imgEl.classList.add("story-fade-out");
+          setTimeout(() => {
+            imgEl.src = urls[idx];
+            imgEl.classList.remove("story-fade-out");
+            if (dotsEl) {
+              dotsEl.querySelectorAll("button").forEach((b, j) => {
+                b.classList.toggle("active", j === idx);
+              });
+            }
+          }, 400);
+        }
+
+        let timer = null;
+        function restart() {
+          if (timer) clearInterval(timer);
+          if (urls.length < 2) return;
+          timer = setInterval(() => {
+            show((idx + 1) % urls.length);
+          }, 4000);
+        }
+        restart();
+      })();
+
+      // Featured grid
       const grid = document.getElementById("featuredGrid");
       if (grid) {
-        const featured = productList.filter(p => p.is_featured).slice(0, 6);
-        const items = featured.length >= 4 ? featured : productList.slice(0, 6);
-
+        const featured = productList.filter(p => p.is_featured);
+        const items = (featured.length >= 4 ? featured : productList).slice(0, 6);
         const sizes = ["large", "medium", "medium", "wide", "small", "small"];
-
-        grid.innerHTML = items.map((p, i) => `
-          <div class="featured-item ${sizes[i] || 'small'}" onclick="location.href='products.html'">
-            <img src="${p.image}" alt="${p.name}" loading="lazy"
-                 onerror="this.src='images/melghat-pure-wild.png'">
-            <div class="overlay">
-              <h5>${p.name}</h5>
-              <p>${p.short_desc || "Pure Forest Honey"}</p>
-            </div>
-          </div>
-        `).join("");
+        if (!items.length) {
+          grid.innerHTML = '<div style="grid-column:1/-1" class="text-center text-muted py-4">Products will appear here once added in Admin.</div>';
+        } else {
+          grid.innerHTML = items.map((p, i) => `
+            <div class="featured-item ${sizes[i] || "small"}" onclick="location.href='products.html'">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
+              <div class="overlay">
+                <h5>${p.name}</h5>
+                <p>${(p.short_desc || "Pure Forest Honey").substring(0, 60)}</p>
+              </div>
+            </div>`).join("");
+        }
       }
 
-      // ========== MARQUEE ==========
+      // Marquee
       const track = document.getElementById("marqueeTrack");
-      if (track) {
-        const marqueeItems = [...productList, ...productList]; // duplicate for seamless loop
+      if (track && productList.length) {
+        const marqueeItems = [...productList, ...productList];
         track.innerHTML = marqueeItems.map(p => `
           <div class="marquee-item">
-            <img src="${p.image}" alt="${p.name}" loading="lazy"
-                 onerror="this.src='images/melghat-pure-wild.png'">
-          </div>
-        `).join("");
+            <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
+          </div>`).join("");
       }
 
-      // ========== MINI PRODUCTS under story ==========
+      // Mini products
       const miniRow = document.getElementById("miniProductRow");
       if (miniRow) {
-        miniRow.innerHTML = productList.slice(0, 3).map(p => `
-          <img src="${p.image}" alt="${p.name}" loading="lazy"
-               onerror="this.src='images/melghat-pure-wild.png'">
-        `).join("");
+        miniRow.innerHTML = productList.slice(0, 4).map(p => `
+          <div class="mini-thumb" onclick="openAddModal(${Number(p.id)||0})" title="${p.name}">
+            <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
+          </div>`).join("");
       }
 
-      // ========== PREVIEW PRODUCTS ==========
+
+      // Loved by Nature — marketing-images (clear cards)
+      const lifeGrid = document.getElementById("lifestyleGrid");
+      if (lifeGrid) {
+        let mktUrls = [];
+        try {
+          if (typeof fetchMarketingImages === "function") {
+            const mkt = await fetchMarketingImages();
+            mktUrls = (mkt || []).map(m => m.url).filter(Boolean);
+          }
+        } catch (e) { console.warn("marketing", e); }
+        // Direct list fallback if helper empty
+        if (!mktUrls.length && typeof SUPABASE_URL !== "undefined") {
+          try {
+            const res = await fetch(SUPABASE_URL + "/storage/v1/object/list/marketing-images", {
+              method: "POST",
+              headers: {
+                "apikey": SUPABASE_ANON_KEY,
+                "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ prefix: "", limit: 30 })
+            });
+            const files = await res.json();
+            if (Array.isArray(files)) {
+              mktUrls = files
+                .filter(f => f.name && f.id != null && /\.(png|jpe?g|webp|gif)$/i.test(f.name))
+                .map(f => SUPABASE_URL + "/storage/v1/object/public/marketing-images/" + f.name);
+            }
+          } catch (e2) { console.warn(e2); }
+        }
+        if (mktUrls.length < 2) {
+          productList.forEach(p => { if (p.image) mktUrls.push(p.image); });
+        }
+        mktUrls = [...new Set(mktUrls)].slice(0, 6);
+        if (!mktUrls.length) {
+          lifeGrid.innerHTML = '<div class="nature-empty">Upload images in Admin → Media → marketing-images</div>';
+        } else {
+          lifeGrid.innerHTML = mktUrls.map((url, i) => `
+            <div class="nature-card ${i === 0 ? "wide" : ""}">
+              <div class="img-box">
+                <img src="${url}" alt="Melghat Honey" loading="lazy"
+                     onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
+              </div>
+            </div>`).join("");
+        }
+      }
+
+      // Preview products
       const container = document.getElementById("previewProducts");
       if (container) {
-        container.innerHTML = productList.slice(0, 3).map(p => `
-          <div class="col-md-4">
-            <div class="product-card">
-              <div class="product-img-wrap">
-                <img src="${p.image}" alt="${p.name}" loading="lazy"
-                     onerror="this.src='images/melghat-pure-wild.png'">
-              </div>
-              <div class="product-body">
-                <h5>${p.name}</h5>
-                <p class="text-muted small">${(p.short_desc || "").substring(0, 80)}...</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="product-price">₹${p.price}</span>
-                  <button class="btn btn-sm btn-add-cart" onclick="openAddModal('${p.id}')">Add to Cart</button>
+        if (!productList.length) {
+          container.innerHTML = '<div class="col-12 text-center text-muted">No products yet.</div>';
+        } else {
+          container.innerHTML = productList.slice(0, 3).map(p => `
+            <div class="col-md-4">
+              <div class="product-card">
+                <div class="product-img-wrap">
+                  <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
+                </div>
+                <div class="product-body">
+                  <h5>${p.name}</h5>
+                  <p class="text-muted small">${(p.short_desc || "").substring(0, 80)}${(p.short_desc || "").length > 80 ? "..." : ""}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="product-price">${money(p.price)}</span>
+                    <button class="btn btn-sm btn-add-cart" onclick="openAddModal(${Number(p.id) || 0})">Add to Cart</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        `).join("");
+            </div>`).join("");
+        }
       }
     });
   </script>

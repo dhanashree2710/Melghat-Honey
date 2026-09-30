@@ -127,12 +127,12 @@ function renderCartModal() {
   });
 
   html += `</tbody></table></div>
-    <div class="d-flex justify-content-between align-items-center mt-3">
-      <h5>Total: <span class="text-warning">${formatPrice(getCartTotal())}</span></h5>
-      <div>
-        <button class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Continue Shopping</button>
-        <a href="https://wa.me/919699544383?text=${encodeURIComponent("Hello Melghat Honey! I want to order:\\n" + cart.map(c => `${c.name} ${c.size} x${c.quantity}`).join("\\n") + "\\nTotal: " + formatPrice(getCartTotal()))}" 
-           class="btn btn-success" onclick="placeOrderWhatsApp()"><i class="fab fa-whatsapp me-1"></i> Order via WhatsApp</button>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+      <h5 class="mb-0">Total: <span class="text-warning">${formatPrice(getCartTotal())}</span></h5>
+      <div class="d-flex flex-wrap gap-2">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+        <button type="button" class="btn btn-success" onclick="placeOrderWhatsApp()"><i class="fab fa-whatsapp me-1"></i> WhatsApp</button>
+        <button type="button" class="btn btn-warning fw-semibold" onclick="goToCheckout()"><i class="fas fa-bolt me-1"></i> Checkout</button>
       </div>
     </div>`;
 
@@ -140,3 +140,22 @@ function renderCartModal() {
 }
 
 document.addEventListener("DOMContentLoaded", updateCartBadge);
+
+/* Fallback if checkout.js not loaded */
+if (typeof placeOrderWhatsApp !== "function") {
+  function placeOrderWhatsApp() {
+    if (!cart.length) { showToast("Cart is empty"); return; }
+    let msg = "Hello Melghat Honey! I want to order:\n";
+    cart.forEach(c => { msg += `${c.name} ${c.size} x${c.quantity}\n`; });
+    msg += "Total: " + formatPrice(getCartTotal());
+    window.open("https://wa.me/919699544383?text=" + encodeURIComponent(msg), "_blank");
+  }
+}
+if (typeof goToCheckout !== "function") {
+  function goToCheckout() {
+    if (typeof requireLoginForCart === "function" && !requireLoginForCart()) return;
+    if (!cart.length) { showToast("Cart is empty"); return; }
+    sessionStorage.removeItem("melghat_buynow");
+    window.location.href = "checkout.html";
+  }
+}

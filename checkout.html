@@ -1,0 +1,567 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Melghat Honey</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    .checkout-steps { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+    .checkout-steps .step {
+      flex: 1; min-width: 120px; text-align: center; padding: 10px 8px;
+      border-radius: 12px; background: #f5f0e8; color: #777; font-size: 0.85rem; font-weight: 600;
+    }
+    .checkout-steps .step.active { background: linear-gradient(135deg,#f4b400,#e6a800); color: #3e2723; }
+    .checkout-steps .step.done { background: #e8f5e9; color: #2e7d32; }
+    .co-card {
+      background: #fff; border-radius: 16px; padding: 22px;
+      box-shadow: 0 6px 22px rgba(78,52,46,0.08); border: 1px solid rgba(244,180,0,0.12);
+      margin-bottom: 18px;
+    }
+    .co-card h5 { color: #3e2723; font-weight: 700; margin-bottom: 16px; }
+    .price-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.95rem; }
+    .price-row.grand { border-top: 2px dashed #e8dfd0; margin-top: 8px; padding-top: 12px; font-weight: 700; font-size: 1.1rem; color: #3e2723; }
+    .item-line { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0ebe3; }
+    .item-line img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; }
+    .pay-opt {
+      border: 2px solid #e8dfd0; border-radius: 12px; padding: 12px 14px; cursor: pointer;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 10px; transition: border-color .2s;
+    }
+    .pay-opt:has(input:checked) { border-color: #f4b400; background: #fffbf0; }
+    .btn-pay {
+      width: 100%; padding: 14px; border: none; border-radius: 50px; font-weight: 700;
+      background: linear-gradient(135deg,#2e7d32,#1b5e20); color: #fff; font-size: 1.05rem;
+      box-shadow: 0 6px 20px rgba(46,125,50,0.3);
+    }
+    .btn-pay:disabled { opacity: 0.6; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <img src="images/logo.png" alt="Melghat Honey" height="42" onerror="this.style.display='none'">
+        <span class="ms-1 fw-bold" style="color:var(--dark-brown,#3e2723)">Melghat Honey</span>
+      </a>
+      <a href="products.html" class="btn btn-sm btn-outline-secondary rounded-pill">Continue Shopping</a>
+    </div>
+  </nav>
+
+  <div class="container py-4" style="max-width:960px">
+    <div class="checkout-steps">
+      <div class="step done"><i class="fas fa-shopping-cart me-1"></i> Cart</div>
+      <div class="step active"><i class="fas fa-map-marker-alt me-1"></i> Details</div>
+      <div class="step" id="stepPay"><i class="fas fa-credit-card me-1"></i> Payment</div>
+      <div class="step"><i class="fas fa-check-circle me-1"></i> Done</div>
+    </div>
+
+    <div id="emptyCheckout" class="text-center py-5 d-none">
+      <p class="text-muted">No items to checkout.</p>
+      <a href="products.html" class="btn btn-warning">Shop Now</a>
+    </div>
+
+    <div id="checkoutMain" class="row g-4">
+      <div class="col-lg-7">
+        <div class="co-card">
+          <h5><i class="fas fa-user me-2" style="color:#f4b400"></i>Delivery Details</h5>
+          <form id="checkoutForm" onsubmit="return false;">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Full Name *</label>
+                <input type="text" class="form-control" id="coName" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Phone *</label>
+                <input type="tel" class="form-control" id="coPhone" required placeholder="10-digit mobile">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold small">Email</label>
+                <input type="email" class="form-control" id="coEmail">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold small">Address *</label>
+                <textarea class="form-control" id="coAddress" rows="2" required placeholder="House no, street, landmark"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">City</label>
+                <input type="text" class="form-control" id="coCity">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">State</label>
+                <input type="text" class="form-control" id="coState">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-semibold small">Pincode</label>
+                <input type="text" class="form-control" id="coPincode" maxlength="6">
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold small">Order notes (optional)</label>
+                <input type="text" class="form-control" id="coNotes" placeholder="Any special instruction">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="co-card">
+          <h5><i class="fas fa-wallet me-2" style="color:#f4b400"></i>Payment Method</h5>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="cod" checked>
+            <span><strong>Cash on Delivery</strong><br><small class="text-muted">Pay when you receive</small></span>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="upi">
+            <span><strong>UPI</strong><br><small class="text-muted">Pay via UPI after placing order</small></span>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="online">
+            <span><strong>Online / Card</strong><br><small class="text-muted">Pay securely online</small></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="co-card">
+          <h5><i class="fas fa-box me-2" style="color:#f4b400"></i>Order Summary</h5>
+          <div id="coItems"></div>
+          <div class="mt-3" id="coPrices"></div>
+          <button type="button" class="btn-pay mt-3" id="btnPlaceOrder" onclick="submitCheckout()">
+            <i class="fas fa-lock me-2"></i>Pay Now / Place Order
+          </button>
+          <p class="text-muted small text-center mt-2 mb-0">GST 5% included in calculation · Free delivery above ₹499</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const session = getSession();
+    if (!session) {
+      window.location.href = "login.html";
+    }
+
+    const items = getCheckoutItems();
+    if (!items.length) {
+      document.getElementById("emptyCheckout").classList.remove("d-none");
+      document.getElementById("checkoutMain").classList.add("d-none");
+    } else {
+      // Prefill from session / profile
+      document.getElementById("coName").value = session.full_name || "";
+      document.getElementById("coEmail").value = session.email || "";
+      document.getElementById("coPhone").value = session.phone || "";
+
+      const box = document.getElementById("coItems");
+      box.innerHTML = items.map(it => `
+        <div class="item-line">
+          <img src="${it.image || 'images/logo.png'}" alt="" onerror="this.src='images/favicon.png'">
+          <div class="flex-grow-1">
+            <div class="fw-semibold">${it.name}</div>
+            <small class="text-muted">${it.size} · Qty ${it.quantity}</small>
+          </div>
+          <div class="fw-semibold">${formatPrice(it.totalPrice)}</div>
+        </div>
+      `).join("");
+
+      const t = calcTotals(items);
+      document.getElementById("coPrices").innerHTML = `
+        <div class="price-row"><span>Subtotal</span><span>${formatPrice(t.subtotal)}</span></div>
+        <div class="price-row"><span>Discount</span><span class="text-success">− ${formatPrice(t.discount)}</span></div>
+        <div class="price-row"><span>GST (5%)</span><span>${formatPrice(t.gst)}</span></div>
+        <div class="price-row"><span>Delivery</span><span>${t.shipping ? formatPrice(t.shipping) : '<span class="text-success">FREE</span>'}</span></div>
+        <div class="price-row grand"><span>Grand Total</span><span>${formatPrice(t.grand)}</span></div>
+      `;
+    }
+
+    async function submitCheckout() {
+      const name = document.getElementById("coName").value.trim();
+      const phone = document.getElementById("coPhone").value.trim();
+      const address = document.getElementById("coAddress").value.trim();
+      if (!name || !phone || !address) {
+        alert("Please fill Name, Phone and Address.");
+        return;
+      }
+      const pay = document.querySelector('input[name="payMethod"]:checked')?.value || "cod";
+      const btn = document.getElementById("btnPlaceOrder");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Placing order...';
+      document.getElementById("stepPay").classList.add("active");
+
+      try {
+        const result = await placeOrderFromCheckout({
+          name,
+          phone,
+          email: document.getElementById("coEmail").value.trim(),
+          address,
+          city: document.getElementById("coCity").value.trim(),
+          state: document.getElementById("coState").value.trim(),
+          pincode: document.getElementById("coPincode").value.trim(),
+          notes: document.getElementById("coNotes").value.trim(),
+          payment_method: pay,
+          discount: 0
+        });
+        window.location.href = "order-success.html?order=" + encodeURIComponent(result.orderNumber);
+      } catch (err) {
+        console.error(err);
+        alert("Could not place order: " + (err.message || "Please try again"));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock me-2"></i>Pay Now / Place Order';
+      }
+    }
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Melghat Honey</title>
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    body { background: #f7f3eb; font-family: 'Poppins', sans-serif; }
+    .co-wrap { max-width: 980px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    /* Steps */
+    .co-steps {
+      display: flex; gap: 6px; margin-bottom: 28px; background: #efe8dc;
+      border-radius: 50px; padding: 5px; max-width: 520px;
+    }
+    .co-step {
+      flex: 1; text-align: center; padding: 10px 6px; border-radius: 50px;
+      font-size: 0.82rem; font-weight: 600; color: #9a8b7a;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .co-step.active { background: #fff; color: #3e2723; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .co-step.done { color: #2e7d32; }
+
+    /* Cards */
+    .co-card {
+      background: #fff; border-radius: 20px; padding: 24px;
+      box-shadow: 0 6px 24px rgba(78,52,46,0.07);
+      border: 1px solid rgba(0,0,0,0.04); margin-bottom: 18px;
+    }
+    .co-card h5 {
+      color: #3e2723; font-weight: 700; font-size: 1.1rem;
+      margin-bottom: 18px; display: flex; align-items: center; gap: 10px;
+    }
+    .co-card h5 i { color: #f4b400; font-size: 1rem; }
+
+    /* Form */
+    .form-label { font-weight: 600; font-size: 0.82rem; color: #5d4e37; margin-bottom: 6px; }
+    .form-control {
+      border-radius: 12px; border: 1.5px solid #e8dfd0; padding: 11px 14px;
+      font-size: 0.95rem; background: #fffcf7;
+    }
+    .form-control:focus {
+      border-color: #f4b400; box-shadow: 0 0 0 3px rgba(244,180,0,0.15);
+      background: #fff;
+    }
+
+    /* Payment options */
+    .pay-opt {
+      border: 2px solid #ebe3d6; border-radius: 14px; padding: 14px 16px;
+      cursor: pointer; margin-bottom: 10px; display: flex; align-items: center;
+      gap: 14px; transition: all .2s; background: #fffcf7;
+    }
+    .pay-opt:hover { border-color: #f0d78c; }
+    .pay-opt:has(input:checked) {
+      border-color: #f4b400; background: #fff8e7;
+      box-shadow: 0 0 0 3px rgba(244,180,0,0.12);
+    }
+    .pay-opt input { width: 18px; height: 18px; accent-color: #f4b400; }
+    .pay-opt strong { color: #3e2723; font-size: 0.95rem; }
+    .pay-opt small { color: #9a8b7a; font-size: 0.78rem; }
+
+    /* Order items */
+    .item-line {
+      display: flex; gap: 14px; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid #f0ebe3;
+    }
+    .item-line:last-child { border-bottom: none; }
+    .item-line img {
+      width: 58px; height: 58px; object-fit: cover; border-radius: 12px;
+      background: #f5f0e8; flex-shrink: 0;
+    }
+    .item-line .name { font-weight: 600; color: #3e2723; font-size: 0.95rem; }
+    .item-line .meta { color: #9a8b7a; font-size: 0.8rem; }
+    .item-line .price { font-weight: 700; color: #c9a227; white-space: nowrap; }
+
+    /* Price rows */
+    .price-row {
+      display: flex; justify-content: space-between; padding: 7px 0;
+      font-size: 0.92rem; color: #5d4e37;
+    }
+    .price-row.grand {
+      border-top: 2px dashed #e8dfd0; margin-top: 10px; padding-top: 14px;
+      font-weight: 700; font-size: 1.15rem; color: #3e2723;
+    }
+    .price-row .free { color: #2e7d32; font-weight: 600; }
+
+    /* Button */
+    .btn-pay {
+      width: 100%; padding: 15px; border: none; border-radius: 50px;
+      font-weight: 700; font-size: 1.05rem; color: #fff;
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      box-shadow: 0 8px 24px rgba(46,125,50,0.28);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-pay:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(46,125,50,0.35);
+    }
+    .btn-pay:disabled { opacity: 0.65; cursor: not-allowed; }
+
+    /* Sticky summary on desktop */
+    @media (min-width: 992px) {
+      .summary-col { position: sticky; top: 90px; }
+    }
+
+    /* Empty */
+    .empty-box {
+      text-align: center; padding: 60px 20px; background: #fff;
+      border-radius: 20px; box-shadow: 0 6px 24px rgba(78,52,46,0.06);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html" title="Melghat Honey">
+        <img src="images/logo.png" alt="Melghat Honey" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon" style="filter:invert(1)"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mx-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="bulk-order.html">Bulk Order</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3">
+          <div class="header-search" id="headerSearch">
+            <input type="search" id="globalSearchInput" placeholder="Search honey..." onkeydown="if(event.key==='Enter'){goSearch();}">
+            <a href="#" class="search-toggle nav-icon-btn" onclick="toggleHeaderSearch(event)" title="Search"><i class="fas fa-search"></i></a>
+          </div>
+          <a href="my-orders.html" class="nav-icon-btn nav-icon-orders" title="My Orders"><i class="fas fa-clipboard-list"></i></a>
+          <a href="#" class="nav-icon-btn nav-icon-cart position-relative" onclick="openCartModal(); return false;" title="Cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cartBadge" class="cart-badge" style="display:none">0</span>
+          </a>
+          <a href="login.html" class="nav-icon-btn nav-icon-login" title="Login"><i class="fas fa-user-circle"></i></a>
+          <a href="products.html" class="btn btn-order">Shop Now</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="co-wrap">
+    <!-- Steps -->
+    <div class="co-steps mx-auto">
+      <div class="co-step done"><i class="fas fa-shopping-cart"></i> Cart</div>
+      <div class="co-step active"><i class="fas fa-map-marker-alt"></i> Details</div>
+      <div class="co-step" id="stepPay"><i class="fas fa-credit-card"></i> Payment</div>
+      <div class="co-step"><i class="fas fa-check-circle"></i> Done</div>
+    </div>
+
+    <!-- Empty state -->
+    <div id="emptyCheckout" class="empty-box d-none">
+      <i class="fas fa-shopping-basket fa-3x mb-3" style="color:#d4c4a8"></i>
+      <h5 style="color:#3e2723">No items to checkout</h5>
+      <p class="text-muted mb-3">Your cart is empty. Add some pure honey first.</p>
+      <a href="products.html" class="btn btn-warning rounded-pill px-4 fw-semibold">Shop Now</a>
+    </div>
+
+    <!-- Main -->
+    <div id="checkoutMain" class="row g-4">
+      <!-- Left: Form -->
+      <div class="col-lg-7">
+        <div class="co-card">
+          <h5><i class="fas fa-user"></i> Delivery Details</h5>
+          <form id="checkoutForm" onsubmit="return false;">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name *</label>
+                <input type="text" class="form-control" id="coName" required placeholder="Your full name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone *</label>
+                <input type="tel" class="form-control" id="coPhone" required placeholder="10-digit mobile">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" id="coEmail" placeholder="you@example.com">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Address *</label>
+                <textarea class="form-control" id="coAddress" rows="2" required placeholder="House no, street, landmark"></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" id="coCity" placeholder="City">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input type="text" class="form-control" id="coState" placeholder="State">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Pincode</label>
+                <input type="text" class="form-control" id="coPincode" maxlength="6" placeholder="6-digit">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Order notes (optional)</label>
+                <input type="text" class="form-control" id="coNotes" placeholder="Any special instruction">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="co-card">
+          <h5><i class="fas fa-wallet"></i> Payment Method</h5>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="cod" checked>
+            <div>
+              <strong>Cash on Delivery</strong><br>
+              <small>Pay when you receive the order</small>
+            </div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="upi">
+            <div>
+              <strong>UPI</strong><br>
+              <small>Pay via UPI after placing the order</small>
+            </div>
+          </label>
+          <label class="pay-opt">
+            <input type="radio" name="payMethod" value="online">
+            <div>
+              <strong>Online / Card</strong><br>
+              <small>Pay securely with card or net banking</small>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="col-lg-5">
+        <div class="summary-col">
+          <div class="co-card">
+            <h5><i class="fas fa-box"></i> Order Summary</h5>
+            <div id="coItems"></div>
+            <div class="mt-3" id="coPrices"></div>
+            <button type="button" class="btn-pay mt-3" id="btnPlaceOrder" onclick="submitCheckout()">
+              <i class="fas fa-lock me-2"></i>Place Order
+            </button>
+            <p class="text-muted small text-center mt-3 mb-0" style="font-size:0.78rem">
+              GST 5% included · Free delivery above ₹499
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    const session = getSession();
+    if (!session) {
+      window.location.href = "login.html";
+    }
+
+    const items = getCheckoutItems();
+    if (!items.length) {
+      document.getElementById("emptyCheckout").classList.remove("d-none");
+      document.getElementById("checkoutMain").classList.add("d-none");
+    } else {
+      // Prefill
+      document.getElementById("coName").value = session.full_name || "";
+      document.getElementById("coEmail").value = session.email || "";
+      document.getElementById("coPhone").value = session.phone || "";
+
+      // Items
+      const box = document.getElementById("coItems");
+      box.innerHTML = items.map(it => `
+        <div class="item-line">
+          <img src="${it.image || 'images/logo.png'}" alt="" onerror="this.src='images/favicon.png'">
+          <div class="flex-grow-1">
+            <div class="name">${it.name}</div>
+            <div class="meta">${it.size || ""} · Qty ${it.quantity}</div>
+          </div>
+          <div class="price">${formatPrice(it.totalPrice)}</div>
+        </div>
+      `).join("");
+
+      // Prices
+      const t = calcTotals(items);
+      document.getElementById("coPrices").innerHTML = `
+        <div class="price-row"><span>Subtotal</span><span>${formatPrice(t.subtotal)}</span></div>
+        <div class="price-row"><span>Discount</span><span class="text-success">− ${formatPrice(t.discount)}</span></div>
+        <div class="price-row"><span>GST (5%)</span><span>${formatPrice(t.gst)}</span></div>
+        <div class="price-row"><span>Delivery</span><span>${t.shipping ? formatPrice(t.shipping) : '<span class="free">FREE</span>'}</span></div>
+        <div class="price-row grand"><span>Grand Total</span><span>${formatPrice(t.grand)}</span></div>
+      `;
+    }
+
+    async function submitCheckout() {
+      const name = document.getElementById("coName").value.trim();
+      const phone = document.getElementById("coPhone").value.trim();
+      const address = document.getElementById("coAddress").value.trim();
+      if (!name || !phone || !address) {
+        alert("Please fill Name, Phone and Address.");
+        return;
+      }
+      const pay = document.querySelector('input[name="payMethod"]:checked')?.value || "cod";
+      const btn = document.getElementById("btnPlaceOrder");
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Placing order...';
+      document.getElementById("stepPay").classList.add("active");
+
+      try {
+        const result = await placeOrderFromCheckout({
+          name,
+          phone,
+          email: document.getElementById("coEmail").value.trim(),
+          address,
+          city: document.getElementById("coCity").value.trim(),
+          state: document.getElementById("coState").value.trim(),
+          pincode: document.getElementById("coPincode").value.trim(),
+          notes: document.getElementById("coNotes").value.trim(),
+          payment_method: pay,
+          discount: 0
+        });
+        window.location.href = "order-success.html?order=" + encodeURIComponent(result.orderNumber);
+      } catch (err) {
+        console.error(err);
+        alert("Could not place order: " + (err.message || "Please try again"));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-lock me-2"></i>Place Order';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -15,13 +15,12 @@
     .story-hero {
       min-height: 48vh;
       background: linear-gradient(rgba(30,40,25,0.62), rgba(50,30,20,0.72)),
-                  url('images/honey-forest-2.jpg') center/cover no-repeat;
+                  url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600') center/cover no-repeat;
       display: flex; align-items: center; color: #fff; text-align: center;
     }
     .story-hero h1 { font-weight: 800; font-size: clamp(1.8rem, 4vw, 3rem); text-shadow: 0 2px 20px rgba(0,0,0,0.4); }
     .story-hero .lead { opacity: 0.9; font-size: 1.15rem; max-width: 640px; margin: 0 auto; }
 
-    /* Overlapping two-card layout (one main, one offset up/down) */
     .overlap-wrap {
       position: relative;
       max-width: 560px;
@@ -81,13 +80,66 @@
     }
     .award-photo-card {
       border-radius: 18px; overflow: hidden;
-      border: 4px solid rgba(244,180,0,0.45);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      border: 3px solid rgba(244,180,0,0.5);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+      background: #fff;
+    }
+    .award-photo-card.main-photo {
       background: #1a120f;
     }
     .award-photo-card img {
-      width: 100%; height: auto; display: block; max-height: 380px; object-fit: cover; object-position: center top;
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 400px;
+      object-fit: contain;
+      object-position: center;
+      background: #fff;
     }
+    .award-photo-card.main-photo img {
+      max-height: 380px;
+      min-height: 260px;
+      background: #1a120f;
+      object-fit: contain;
+    }
+    .award-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 32px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .award-gallery .award-photo-card {
+      max-width: none;
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+    }
+    .award-gallery .award-photo-card img {
+      max-height: 200px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      background: #fff;
+      min-height: 0;
+    }
+    .award-gallery .award-photo-card.is-logo {
+      min-height: 160px;
+      padding: 20px;
+    }
+    .award-gallery .award-photo-card.is-logo img {
+      max-height: 120px;
+      max-width: 160px;
+    }
+    .award-gallery .award-photo-card.is-doc img {
+      max-height: 240px;
+    }
+
     .stat-box {
       background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
       border-radius: 16px; padding: 22px 14px; text-align: center; height: 100%;
@@ -119,25 +171,13 @@
       font-size: 1.4rem; color: var(--forest-green); margin-bottom: 16px;
     }
 
-    /* Product strip cards — product only, no models */
-    .product-strip {
-      display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
-      padding: 10px 0 20px;
+    .cert-logo-row {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center;
     }
-    .product-strip-card {
-      width: 200px; height: 220px;
-      border-radius: 20px; overflow: hidden;
-      background: #fff;
-      border: 4px solid #fff;
-      box-shadow: 0 12px 35px rgba(78,52,46,0.14);
-      transition: transform 0.35s, box-shadow 0.35s;
-    }
-    .product-strip-card:hover {
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 18px 45px rgba(78,52,46,0.22);
-    }
-    .product-strip-card img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
+    .cert-logo-row img {
+      width: 80px; height: 80px; object-fit: contain;
+      background: #fff; border-radius: 14px; padding: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid #f0e6d0;
     }
 
     @media (max-width: 768px) {
@@ -147,7 +187,7 @@
       .overlap-card.float-up { width: 48%; height: 170px; top: -10px; }
       .overlap-card.float-down { width: 50%; height: 160px; }
       .stat-box .num { font-size: 1.7rem; }
-      .product-strip-card { width: 140px; height: 160px; border-radius: 14px; }
+      .award-photo-card img { max-height: 300px; }
     }
   </style>
 </head>
@@ -185,7 +225,6 @@
     </div>
   </nav>
 
-  <!-- Hero -->
   <section class="story-hero">
     <div class="container fade-in">
       <p class="text-uppercase mb-2" style="letter-spacing:3px;font-size:0.85rem;color:#f4b400">Our Story</p>
@@ -194,20 +233,19 @@
     </div>
   </section>
 
-  <!-- Our Story — overlapping cards (one up, one down) -->
   <section class="py-5">
     <div class="container">
       <div class="row align-items-center g-5">
         <div class="col-lg-6 fade-in">
           <div class="overlap-wrap">
             <div class="overlap-card main">
-              <img src="images/zBdci.jpg" alt="Melghat forest">
+              <img src="images/nature/deu0p.jpg" alt="Melghat forest landscape" id="aboutImgMain">
             </div>
             <div class="overlap-card float-up">
-              <img src="images/Gemini_Generated_Image_l2jwr5l2jwr5l2jw.png" alt="Pure Melghat honey">
+              <img src="images/nature/zBdci.jpg" alt="Pure honey jars" id="aboutImgUp">
             </div>
             <div class="overlap-card float-down">
-              <img src="images/deu0p.jpg" alt="Raw forest honey">
+              <img src="images/nature/D2huo.jpg" alt="Honey dipper and jar" id="aboutImgDown">
             </div>
           </div>
         </div>
@@ -225,7 +263,7 @@
     </div>
   </section>
 
-  <!-- Padma Shri Award -->
+  <!-- Padma Shri / Award section — photos clear, no filenames -->
   <section class="award-section py-5">
     <div class="container position-relative">
       <div class="text-center mb-5 fade-in">
@@ -238,11 +276,12 @@
 
       <div class="row align-items-center g-5">
         <div class="col-lg-6 fade-in">
-          <div class="award-photo-card">
-            <img src="images/award.png" alt="Padma Shri — Dr. Ravindra Kolhe and Dr. Smita Kolhe"
-                 onerror="this.src='images/honey-product-2.jpg'; this.style.objectFit='contain'; this.style.background='#2a1f1a'; this.style.minHeight='280px'">
+          <div class="award-photo-card main-photo" id="mainAwardCard">
+            <img id="mainAwardImg"
+                 src="https://dmehkoxuczhfhnjinniy.supabase.co/storage/v1/object/public/certificates/1790750542262-n94o7k.jpeg"
+                 alt="Padma Shri award"
+                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900';this.style.minHeight='280px'">
           </div>
-          <p class="text-center small mt-3 opacity-75 mb-0">Award ceremony with President Ram Nath Kovind, 2019</p>
         </div>
         <div class="col-lg-6 fade-in">
           <h3 class="fw-bold mb-3" style="color:#f4b400">Dr. Ravindra Kolhe &amp; Dr. Smita Kolhe</h3>
@@ -251,6 +290,9 @@
           <p class="opacity-90 mb-0">Their unwavering commitment to healthcare accessibility and community welfare inspired us to support the same communities through ethical honey sourcing — ensuring fair compensation and sustainable livelihoods for tribal families.</p>
         </div>
       </div>
+
+      <!-- Extra award photos from storage (no names shown) -->
+      <div class="award-gallery" id="awardGallery"></div>
 
       <div class="row g-3 mt-5 fade-in">
         <div class="col-md-4">
@@ -275,8 +317,15 @@
     </div>
   </section>
 
-  <!-- Mission Vision Values -->
-  <section class="py-5" style="background:var(--light-cream)">
+  <!-- Certificate logos only (icons, no filenames) -->
+  <section class="py-4" id="certLogoSection" style="display:none;background:#faf6ee">
+    <div class="container text-center">
+      <h5 class="fw-bold mb-3" style="color:var(--dark-brown)">Certifications</h5>
+      <div class="cert-logo-row" id="certLogoRow"></div>
+    </div>
+  </section>
+
+  <section class="py-5" style="background:var(--light-cream,#f5f0e8)">
     <div class="container">
       <div class="section-title fade-in">
         <h2>What Drives Us</h2>
@@ -307,7 +356,6 @@
     </div>
   </section>
 
-  <!-- Why Choose -->
   <section class="py-5">
     <div class="container">
       <div class="section-title fade-in">
@@ -346,7 +394,6 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="py-5" style="background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff">
     <div class="container text-center fade-in">
       <h2 class="mb-3">Taste the Forest. Support the Community.</h2>
@@ -414,5 +461,81 @@
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        if (typeof fetchCertificateImages !== "function") return;
+        const certs = await fetchCertificateImages();
+        if (!certs || !certs.length) return;
+
+        const split = typeof splitCertificateAssets === "function"
+          ? splitCertificateAssets(certs)
+          : { logos: [], awards: certs };
+
+        // Classify: ceremony photo vs document vs logo
+        const all = certs.slice();
+        const isLogo = (c) => /fssai|agmark|logo|seal|badge|iso|organic|mark/i.test((c.name||"")+" "+(c.path||""));
+        const isDoc = (c) => /cert|award|document|pdf|national|excellence|padma/i.test((c.name||"")+" "+(c.path||"")) && !isLogo(c);
+        const logos = all.filter(isLogo);
+        const docs = all.filter(c => isDoc(c) && !isLogo(c));
+        const photos = all.filter(c => !isLogo(c) && !isDoc(c));
+        // Prefer large ceremony-style images for main
+        const mainPool = photos.length ? photos : (docs.length ? docs : all);
+        const main = document.getElementById("mainAwardImg");
+        if (main && mainPool[0]) {
+          main.src = mainPool[0].url;
+          main.alt = "Padma Shri award ceremony";
+          main.style.objectFit = "contain";
+        }
+        // Gallery: remaining photos + docs + logos — white cards, full image visible, no names
+        const gallery = document.getElementById("awardGallery");
+        if (gallery) {
+          const rest = [];
+          mainPool.slice(1).forEach(c => rest.push({...c, kind: "photo"}));
+          docs.filter(c => c.url !== (mainPool[0] && mainPool[0].url)).forEach(c => rest.push({...c, kind: "doc"}));
+          logos.forEach(c => rest.push({...c, kind: "logo"}));
+          // If only one item was used as main, still show logos/docs
+          if (!rest.length) {
+            all.filter(c => c.url !== (mainPool[0] && mainPool[0].url)).forEach(c => {
+              rest.push({...c, kind: isLogo(c) ? "logo" : (isDoc(c) ? "doc" : "photo")});
+            });
+          }
+          gallery.innerHTML = rest.slice(0, 6).map(c => `
+            <div class="award-photo-card ${c.kind === "logo" ? "is-logo" : ""} ${c.kind === "doc" ? "is-doc" : ""}">
+              <img src="${c.url}" alt="" loading="lazy"
+                   onerror="this.parentElement.style.display='none'">
+            </div>`).join("");
+        }
+        // Hide separate cert logo section if gallery already has logos
+        const sec = document.getElementById("certLogoSection");
+        if (sec) sec.style.display = "none";
+      } catch (e) { console.warn(e); }
+    });
+  </script>
+
+  <!-- <script>
+    // Story collage: use marketing/product honey images when available
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        let urls = [];
+        if (typeof fetchMarketingImages === "function") {
+          const m = await fetchMarketingImages();
+          urls = (m || []).map(x => x.url).filter(Boolean);
+        }
+        if (urls.length < 3 && typeof fetchProductBucketImages === "function") {
+          const pr = await fetchProductBucketImages();
+          urls = urls.concat((pr || []).map(x => x.url).filter(Boolean));
+        }
+        urls = [...new Set(urls)];
+        const main = document.getElementById("aboutImgMain");
+        const up = document.getElementById("aboutImgUp");
+        const down = document.getElementById("aboutImgDown");
+        if (urls[0] && main) main.src = urls[0];
+        if (urls[1] && up) up.src = urls[1];
+        if (urls[2] && down) down.src = urls[2];
+      } catch (e) {}
+    });
+  </script> -->
+
 </body>
 </html>

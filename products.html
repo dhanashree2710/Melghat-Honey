@@ -149,7 +149,6 @@
     <div class="search-panel" id="searchPanel"></div>
   </div>
 
-  <!-- Hero -->
   <section class="products-hero">
     <div class="container fade-in">
       <p class="text-uppercase mb-2" style="letter-spacing:3px;font-size:0.8rem;color:#f4b400">Shop</p>
@@ -161,7 +160,6 @@
   <div class="fk-layout py-4">
     <div class="container">
       <div class="row g-3">
-        <!-- Filters -->
         <div class="col-lg-3">
           <div class="fk-filter">
             <h6><i class="fas fa-sliders-h me-2 text-warning"></i>Filters</h6>
@@ -185,7 +183,6 @@
           </div>
         </div>
 
-        <!-- Grid -->
         <div class="col-lg-9">
           <div class="fk-toolbar d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div>
@@ -281,7 +278,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body text-center">
-          <img id="modalProductImg" src="" class="rounded mb-3" style="width:120px;height:120px;object-fit:contain;background:#faf6ee">
+          <img id="modalProductImg" src="" class="rounded mb-3" style="width:120px;height:120px;object-fit:contain;background:#faf6ee" alt="">
           <h5 id="modalProductName"></h5>
           <select id="modalSizeSelect" class="form-select size-select my-3" onchange="changeModalSize()"></select>
           <div class="d-flex justify-content-center align-items-center gap-3 my-3">
@@ -306,29 +303,39 @@
   <script src="js/supabase-config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
   <script src="js/config.local.js" onerror="window.MELGHAT_CONFIG=window.MELGHAT_CONFIG||{}"></script>
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
   <script>
+    const FALLBACK_IMG = "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800";
     let currentFilters = { minPrice: "", maxPrice: "", query: "", sort: "" };
 
+    function imgOf(p) {
+      if (typeof pickProductImage === "function") return pickProductImage(p);
+      return (p && p.image) || FALLBACK_IMG;
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
-      await loadStoreProducts();
+      if (typeof loadStoreProducts === "function") await loadStoreProducts();
       applyFilters();
       showRecommendations();
 
       const hs = document.getElementById("headerSearch");
-      hs.addEventListener("input", onHeaderSearch);
-      hs.addEventListener("focus", onHeaderSearch);
+      if (hs) {
+        hs.addEventListener("input", onHeaderSearch);
+        hs.addEventListener("focus", onHeaderSearch);
+      }
       document.addEventListener("click", e => {
         if (!e.target.closest(".nav-search-wrap") && !e.target.closest("#searchPanel")) {
-          document.getElementById("searchPanel").classList.remove("open");
+          const panel = document.getElementById("searchPanel");
+          if (panel) panel.classList.remove("open");
         }
       });
 
       const params = new URLSearchParams(location.search);
-      if (params.get("q")) {
+      if (params.get("q") && hs) {
         hs.value = params.get("q");
         currentFilters.query = params.get("q");
         applyFilters();
@@ -339,8 +346,8 @@
       currentFilters.minPrice = document.getElementById("minPrice").value;
       currentFilters.maxPrice = document.getElementById("maxPrice").value;
       currentFilters.sort = document.getElementById("sortBy").value;
-      currentFilters.query = document.getElementById("headerSearch").value.trim();
-      const list = filterProducts(currentFilters);
+      currentFilters.query = (document.getElementById("headerSearch").value || "").trim();
+      const list = typeof filterProducts === "function" ? filterProducts(currentFilters) : [];
       renderProducts(list);
     }
 
@@ -358,23 +365,24 @@
       document.getElementById("resultCount").textContent = list.length;
       document.getElementById("activeQuery").textContent = currentFilters.query ? `for "${currentFilters.query}"` : "";
       document.getElementById("emptyState").style.display = list.length ? "none" : "block";
+      const money = typeof formatPrice === "function" ? formatPrice : (n) => "₹" + Number(n || 0);
       grid.innerHTML = list.map(p => {
         const sizes = Object.keys(p.sizes || {});
         const price = p.minPrice || (p.sizes && Object.values(p.sizes)[0]) || 0;
-        const mrp = Math.round(price * 1.2);
-        const off = price ? Math.round((1 - price / mrp) * 100) : 0;
+        const mrp = p.mrp || Math.round(price * 1.2);
+        const off = price && mrp > price ? Math.round((1 - price / mrp) * 100) : 0;
+        const src = imgOf(p);
         return `<div class="col-6 col-md-4">
           <div class="fk-card" onclick="openAddModal(${p.id})">
             <div class="img-box">
-              <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.src='images/honey-product-1.jpg'">
+              <img src="${src}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
             </div>
             <div class="body">
               <div class="title">${p.name}</div>
               <div class="mt-1 small text-muted">${sizes.join(" · ")}</div>
               <div class="mt-2">
-                <span class="fk-price">${formatPrice(price)}</span>
-                <span class="fk-mrp">${formatPrice(mrp)}</span>
-                <span class="fk-off">${off}% off</span>
+                <span class="fk-price">${money(price)}</span>
+                ${off > 0 ? `<span class="fk-mrp">${money(mrp)}</span><span class="fk-off">${off}% off</span>` : ""}
               </div>
               <button class="btn btn-add" onclick="event.stopPropagation(); openAddModal(${p.id})">
                 <i class="fas fa-cart-plus me-1"></i>Add to Cart
@@ -388,19 +396,22 @@
     function onHeaderSearch() {
       const q = document.getElementById("headerSearch").value.trim();
       const panel = document.getElementById("searchPanel");
+      const money = typeof formatPrice === "function" ? formatPrice : (n) => "₹" + Number(n || 0);
       if (!q) { panel.classList.remove("open"); applyFilters(); return; }
-      const hits = searchProducts(q).slice(0, 8);
+      const hits = (typeof searchProducts === "function" ? searchProducts(q) : []).slice(0, 8);
       panel.classList.add("open");
       if (!hits.length) {
         panel.innerHTML = `<div class="search-hit text-muted">No results for "${q}"</div>`;
+        currentFilters.query = q;
+        applyFilters();
         return;
       }
       panel.innerHTML = hits.map(p => `
         <div class="search-hit" onclick="openAddModal(${p.id}); document.getElementById('searchPanel').classList.remove('open')">
-          <img src="${p.image}" alt="" onerror="this.src='images/honey-product-1.jpg'">
+          <img src="${imgOf(p)}" alt="" onerror="this.src='${FALLBACK_IMG}'">
           <div>
             <div class="fw-semibold">${p.name}</div>
-            <small class="text-muted">from ${formatPrice(p.minPrice)}</small>
+            <small class="text-muted">from ${money(p.minPrice)}</small>
           </div>
         </div>`).join("");
       currentFilters.query = q;
@@ -408,43 +419,47 @@
     }
 
     function showRecommendations() {
-      const rec = getRecommended(null, 4);
+      const rec = typeof getRecommended === "function" ? getRecommended(null, 4) : [];
       if (!rec.length) return;
+      const money = typeof formatPrice === "function" ? formatPrice : (n) => "₹" + Number(n || 0);
       document.getElementById("recSection").style.display = "block";
       document.getElementById("recList").innerHTML = rec.map(p => `
         <div class="col-6 col-md-3">
           <div class="fk-card" onclick="openAddModal(${p.id})">
             <div class="img-box" style="height:140px">
-              <img src="${p.image}" alt="${p.name}" loading="lazy">
+              <img src="${imgOf(p)}" alt="${p.name}" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">
             </div>
             <div class="body">
               <div class="title" style="font-size:0.85rem;min-height:auto">${p.name}</div>
-              <div class="fk-price" style="font-size:1rem">${formatPrice(p.minPrice)}</div>
+              <div class="fk-price" style="font-size:1rem">${money(p.minPrice)}</div>
             </div>
           </div>
         </div>`).join("");
     }
 
-    const _openAdd = openAddModal;
-    openAddModal = function(productId) {
-      _openAdd(productId);
-      const p = getProductById(productId);
-      if (!p) return;
-      const rec = getRecommended(p.name, 3);
-      const box = document.getElementById("modalRec");
-      const list = document.getElementById("modalRecList");
-      if (rec.length) {
-        box.style.display = "block";
-        list.innerHTML = rec.map(r => `
-          <div class="col-4">
-            <div class="border rounded p-1 text-center" style="cursor:pointer" onclick="bootstrap.Modal.getInstance(document.getElementById('addToCartModal')).hide(); setTimeout(()=>openAddModal(${r.id}),300)">
-              <img src="${r.image}" style="height:50px;object-fit:contain;width:100%">
-              <div class="small text-truncate">${r.name}</div>
-              <div class="small fw-bold">${formatPrice(r.minPrice)}</div>
-            </div>
-          </div>`).join("");
-      } else box.style.display = "none";
-    };
+    if (typeof openAddModal === "function") {
+      const _openAdd = openAddModal;
+      openAddModal = function(productId) {
+        _openAdd(productId);
+        const p = typeof getProductById === "function" ? getProductById(productId) : null;
+        if (!p) return;
+        const rec = typeof getRecommended === "function" ? getRecommended(p.name, 3) : [];
+        const box = document.getElementById("modalRec");
+        const list = document.getElementById("modalRecList");
+        const money = typeof formatPrice === "function" ? formatPrice : (n) => "₹" + Number(n || 0);
+        if (rec.length && box && list) {
+          box.style.display = "block";
+          list.innerHTML = rec.map(r => `
+            <div class="col-4">
+              <div class="border rounded p-1 text-center" style="cursor:pointer" onclick="bootstrap.Modal.getInstance(document.getElementById('addToCartModal')).hide(); setTimeout(()=>openAddModal(${r.id}),300)">
+                <img src="${imgOf(r)}" style="height:50px;object-fit:contain;width:100%" onerror="this.src='${FALLBACK_IMG}'">
+                <div class="small text-truncate">${r.name}</div>
+                <div class="small fw-bold">${money(r.minPrice)}</div>
+              </div>
+            </div>`).join("");
+        } else if (box) box.style.display = "none";
+      };
+    }
   </script>
 </body>
 </html>

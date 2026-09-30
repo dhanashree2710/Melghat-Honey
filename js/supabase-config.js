@@ -135,7 +135,6 @@ async function resetPassword(email, newPassword) {
 
 function logoutUser() {
   setSession(null);
-  // Always return to the main storefront after logout
   if (window.location.pathname.includes("/admin/")) {
     window.location.href = "../index.html";
   } else {
@@ -178,7 +177,6 @@ function groupProducts(rows) {
 
 async function fetchFeaturedForCarousel() {
   const rows = await sbGet("products", "is_active=eq.true&is_featured=eq.true&select=name,image_url,short_desc,category,badge&order=created_at.desc");
-  // unique by image
   const seen = new Set();
   const slides = [];
   for (const r of rows) {
@@ -215,15 +213,22 @@ async function fetchOrders() {
 async function createOrder(order, items) {
   const orderRows = await sbPost("orders", order);
   const orderId = orderRows[0].id;
-  const itemPayload = items.map(it => ({
-    order_id: orderId,
-    product_id: it.product_id || null,
-    product_name: it.product_name,
-    product_size: it.product_size,
-    quantity: it.quantity,
-    unit_price: it.unit_price,
-    total_price: it.total_price
-  }));
+
+  // product_id must be a real UUID or null (never "1", "2", "3")
+  const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const itemPayload = (items || []).map(it => {
+    const pid = it.product_id && uuidRe.test(String(it.product_id)) ? it.product_id : null;
+    return {
+      order_id: orderId,
+      product_id: pid,
+      product_name: it.product_name,
+      product_size: it.product_size || null,
+      quantity: it.quantity,
+      unit_price: it.unit_price,
+      total_price: it.total_price
+    };
+  });
+
   if (itemPayload.length) await sbPost("order_items", itemPayload);
   return orderRows[0];
 }
@@ -244,9 +249,8 @@ function formatPrice(price) {
 function generateOrderNumber() {
   const d = new Date();
   const n = Math.floor(Math.random() * 9000) + 1000;
-  return `MH-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}-${n}`;
+  return `MH-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}-${n}`;
 }
-
 
 async function fetchMarketingImages() {
   try {
@@ -262,7 +266,7 @@ async function fetchMarketingImages() {
     if (!res.ok) throw new Error(await res.text());
     const files = await res.json();
     return (files || [])
-      .filter(f => f.name && !f.name.endsWith("/") && (f.metadata?.mimetype || "").startsWith("image") || /\.(png|jpe?g|webp|gif)$/i.test(f.name))
+      .filter(f => f.name && !f.name.endsWith("/") && ((f.metadata?.mimetype || "").startsWith("image") || /\.(png|jpe?g|webp|gif)$/i.test(f.name)))
       .map(f => ({
         name: f.name,
         url: `${SUPABASE_URL}/storage/v1/object/public/marketing-images/${f.name}`,
@@ -296,6 +300,7 @@ async function createBulkOrder(data) {
     notes: `BULK ORDER | Product: ${data.product} | Qty: ${data.qty} | ${data.message || ""}`
   };
   return createOrder(order, [{
+    product_id: null,
     product_name: data.product || "Bulk enquiry",
     product_size: null,
     quantity: Math.max(1, parseInt(data.qty, 10) || 1),

@@ -1,10 +1,7 @@
-// Melghat Honey – Forest Guide chat proxy
-// GROQ_API_KEY is set in Supabase secrets (never in git)
+const CHAT_GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const CHAT_MODEL = "openai/gpt-oss-20b";
 
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "openai/gpt-oss-20b";
-
-const corsHeaders = {
+const chatCorsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
@@ -13,13 +10,13 @@ const corsHeaders = {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { headers: chatCorsHeaders });
   }
 
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -31,7 +28,7 @@ Deno.serve(async (req) => {
       }),
       {
         status: 503,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
       }
     );
   }
@@ -42,28 +39,28 @@ Deno.serve(async (req) => {
   } catch {
     return new Response(JSON.stringify({ error: "Invalid JSON" }), {
       status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
     });
   }
 
   if (!Array.isArray(body.messages) || body.messages.length === 0) {
     return new Response(JSON.stringify({ error: "messages required" }), {
       status: 400,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
     });
   }
 
   const messages = body.messages.slice(-14);
 
   try {
-    const groqRes = await fetch(GROQ_URL, {
+    const groqRes = await fetch(CHAT_GROQ_URL, {
       method: "POST",
       headers: {
         Authorization: "Bearer " + apiKey,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: MODEL,
+        model: CHAT_MODEL,
         messages: messages,
         temperature: 0.6,
         max_tokens: 180,
@@ -73,13 +70,13 @@ Deno.serve(async (req) => {
     const data = await groqRes.json();
     return new Response(JSON.stringify(data), {
       status: groqRes.status,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error(e);
     return new Response(JSON.stringify({ error: "Upstream error" }), {
       status: 502,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: { ...chatCorsHeaders, "Content-Type": "application/json" },
     });
   }
 });

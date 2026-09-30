@@ -10,6 +10,146 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
+  <style>
+    .mo-page { background: #f7f3eb; min-height: 70vh; }
+    .mo-tabs {
+      display: flex; background: #efe8dc; border-radius: 50px; padding: 4px; max-width: 420px; margin: 0 auto 24px;
+    }
+    .mo-tab {
+      flex: 1; border: none; background: transparent; padding: 10px 16px; border-radius: 50px;
+      font-weight: 600; font-size: 0.9rem; color: #8a7a6a; cursor: pointer;
+    }
+    .mo-tab.active { background: #fff; color: #3e2723; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+    .mo-card {
+      background: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 14px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(78,52,46,0.06); border: 1px solid rgba(0,0,0,0.04);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .mo-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(78,52,46,0.1); }
+    .mo-card img { width: 56px; height: 56px; object-fit: cover; border-radius: 12px; background: #f5f0e8; }
+    .mo-card .info { flex: 1; min-width: 0; }
+    .mo-card .info h6 { margin: 0; font-weight: 700; color: #3e2723; font-size: 0.95rem; }
+    .mo-card .info small { color: #9a8b7a; }
+    .mo-badge {
+      font-size: 0.75rem; font-weight: 600; padding: 5px 12px; border-radius: 50px; white-space: nowrap;
+    }
+    .badge-pending, .badge-order-placed { background: #fff3cd; color: #856404; }
+    .badge-confirmed { background: #cfe2ff; color: #084298; }
+    .badge-packed { background: #e2d5f1; color: #6f42c1; }
+    .badge-shipped { background: #ffe5d0; color: #c05600; }
+    .badge-out_for_delivery { background: #ffe5d0; color: #c05600; }
+    .badge-delivered { background: #d1e7dd; color: #0f5132; }
+    .badge-cancelled { background: #f8d7da; color: #842029; }
+
+    .track-panel, .hist-panel { display: none; }
+    .track-panel.active, .hist-panel.active { display: block; }
+
+    .track-detail {
+      background: #fff; border-radius: 20px; padding: 24px; box-shadow: 0 6px 24px rgba(78,52,46,0.08);
+    }
+    .status-banner {
+      background: #fff8e7; border-radius: 14px; padding: 16px 18px; margin: 18px 0;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .status-banner h4 { margin: 0; font-weight: 700; color: #3e2723; }
+    .eta-box {
+      background: #fff; border-radius: 12px; padding: 10px 16px; text-align: center; border: 1px solid #f0e6d0;
+    }
+    .eta-box small { display: block; color: #9a8b7a; font-size: 0.7rem; }
+    .eta-box strong { color: #3e2723; font-size: 1.05rem; }
+
+    .track-line {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin: 28px 0 20px; position: relative; padding: 0 4px;
+    }
+    .track-line::before {
+      content: ""; position: absolute; top: 18px; left: 8%; right: 8%; height: 3px; background: #e8e0d4; z-index: 0;
+    }
+    .track-line .prog {
+      position: absolute; top: 18px; left: 8%; height: 3px; background: #f4b400; z-index: 1; transition: width .4s ease;
+    }
+    .t-step { flex: 1; text-align: center; position: relative; z-index: 2; }
+    .t-step .icon {
+      width: 36px; height: 36px; border-radius: 50%; margin: 0 auto 8px;
+      background: #f0ebe3; color: #bbb; display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; border: 3px solid #f0ebe3;
+    }
+    .t-step.done .icon { background: #fff8e0; color: #f4b400; border-color: #f4b400; }
+    .t-step.current .icon {
+      background: #f4b400; color: #fff; border-color: #f4b400; box-shadow: 0 0 0 5px rgba(244,180,0,0.25);
+    }
+    .t-step .lbl { font-size: 0.72rem; color: #aaa; font-weight: 500; line-height: 1.25; }
+    .t-step.done .lbl, .t-step.current .lbl { color: #3e2723; font-weight: 600; }
+    .t-step .date { font-size: 0.65rem; color: #bbb; margin-top: 2px; }
+
+    .item-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #f0ebe3;
+    }
+    .item-row img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+    .total-bar {
+      background: #faf6ee; border-radius: 12px; padding: 12px 16px;
+      display: flex; justify-content: space-between; font-weight: 700; color: #3e2723;
+    }
+    .back-link {
+      color: #c9a227; font-weight: 600; text-decoration: none; font-size: 0.9rem;
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 14px;
+    }
+    .back-link:hover { color: #a8860f; }
+
+    .btn-help {
+      width: 100%; margin-top: 16px; padding: 12px; border-radius: 50px; border: 2px solid #f4b400;
+      background: #fff; color: #3e2723; font-weight: 700; font-size: 0.95rem;
+    }
+    .btn-help:hover { background: #fff8e7; }
+
+    .help-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000;
+      opacity: 0; visibility: hidden; transition: all .25s;
+    }
+    .help-overlay.open { opacity: 1; visibility: visible; }
+    .help-sheet {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 2001;
+      background: #fff; border-radius: 20px 20px 0 0;
+      max-width: 480px; margin: 0 auto;
+      transform: translateY(100%); transition: transform .3s cubic-bezier(.22,1,.36,1);
+      max-height: 85vh; overflow-y: auto; box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+    }
+    .help-overlay.open .help-sheet { transform: translateY(0); }
+    .help-sheet-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 20px 10px; border-bottom: 1px solid #f0ebe3;
+    }
+    .help-sheet-head h5 { margin: 0; font-weight: 700; color: #3e2723; }
+    .help-sheet-head button {
+      border: none; background: #f5f0e8; width: 32px; height: 32px; border-radius: 50%;
+      color: #666; cursor: pointer;
+    }
+    .help-item {
+      display: flex; align-items: center; gap: 14px; padding: 16px 20px;
+      border-bottom: 1px solid #f5f0e8; cursor: pointer; text-decoration: none; color: #3e2723;
+      background: #fff; width: 100%; border-left: none; border-right: none; border-top: none; text-align: left;
+    }
+    .help-item:hover { background: #faf6ee; }
+    .help-item i.main-icon { width: 22px; color: #555; font-size: 1.1rem; }
+    .help-item .txt { flex: 1; font-weight: 500; font-size: 0.95rem; }
+    .help-item .txt small { display: block; font-weight: 400; color: #999; font-size: 0.78rem; margin-top: 2px; }
+    .help-item.disabled { opacity: 0.55; cursor: not-allowed; }
+    .help-item.disabled .txt { color: #888; }
+
+    .help-form-panel { display: none; padding: 16px 20px 24px; }
+    .help-form-panel.active { display: block; }
+    .help-form-panel .form-control { border-radius: 12px; border: 1.5px solid #e8dfd0; }
+    .help-form-panel .btn-save {
+      width: 100%; padding: 12px; border: none; border-radius: 50px; font-weight: 700;
+      background: linear-gradient(135deg,#2e7d32,#1b5e20); color: #fff; margin-top: 12px;
+    }
+
+    @media (max-width: 576px) {
+      .track-line .lbl { font-size: 0.62rem; }
+      .t-step .icon { width: 30px; height: 30px; font-size: 0.75rem; }
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg sticky-top">
@@ -45,31 +185,123 @@
     </div>
   </nav>
 
-  <section class="py-5" style="background:linear-gradient(135deg,#4e342e,#3e2723);color:#fff">
-    <div class="container text-center">
-      <h1 class="fw-bold">My Orders</h1>
-      <p class="lead opacity-75 mb-0">Track and view your order history</p>
-    </div>
-  </section>
-
-  <section class="py-5">
-    <div class="container">
+  <section class="mo-page py-5">
+    <div class="container" style="max-width:720px">
       <div id="ordersGate" class="text-center py-5" style="display:none">
         <i class="fas fa-lock fa-3x text-warning mb-3"></i>
         <h4>Please login to view your orders</h4>
         <a href="login.html" class="btn btn-warning fw-semibold mt-2">Login / Sign Up</a>
       </div>
+
       <div id="ordersContent" style="display:none">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5 class="mb-0">Hello, <span id="custName"></span></h5>
-          <button class="btn btn-outline-secondary btn-sm" onclick="loadMyOrders()"><i class="fas fa-sync"></i></button>
+        <h2 class="fw-bold mb-1" style="color:#3e2723">My Orders</h2>
+        <p class="text-muted mb-4">Manage and track your honey orders</p>
+
+        <div class="mo-tabs">
+          <button type="button" class="mo-tab" id="tabHistory" onclick="showTab('history')">Order History</button>
+          <button type="button" class="mo-tab active" id="tabTrack" onclick="showTab('track')">Track Order</button>
         </div>
-        <div class="row g-3" id="ordersList"></div>
+
+        <div class="track-panel active" id="panelTrackList">
+          <p class="text-muted small mb-3">Select an order to track:</p>
+          <div id="trackList"></div>
+        </div>
+
+        <div class="track-panel" id="panelTrackDetail">
+          <a href="#" class="back-link" onclick="backToTrackList(); return false;">
+            <i class="fas fa-arrow-left"></i> All Orders
+          </a>
+          <div class="track-detail" id="trackDetail"></div>
+        </div>
+
+        <div class="hist-panel" id="panelHistory">
+          <div id="historyList"></div>
+        </div>
       </div>
     </div>
   </section>
 
-    <footer>
+  <!-- Need help bottom sheet -->
+  <div class="help-overlay" id="helpOverlay" onclick="if(event.target===this)closeHelp()">
+    <div class="help-sheet">
+      <div class="help-sheet-head">
+        <h5 id="helpTitle">Need help?</h5>
+        <button type="button" onclick="closeHelp()" aria-label="Close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div id="helpMenu">
+        <button type="button" class="help-item" onclick="openHelpForm('phone')">
+          <i class="fas fa-phone main-icon"></i>
+          <span class="txt">Change Phone Number</span>
+          <i class="fas fa-chevron-right text-muted"></i>
+        </button>
+        <button type="button" class="help-item" onclick="openHelpForm('address')">
+          <i class="fas fa-map-marker-alt main-icon"></i>
+          <span class="txt">Change delivery address</span>
+          <i class="fas fa-chevron-right text-muted"></i>
+        </button>
+        <button type="button" class="help-item" onclick="openHelpForm('reschedule')">
+          <i class="fas fa-clock main-icon"></i>
+          <span class="txt">Reschedule delivery</span>
+          <i class="fas fa-chevron-right text-muted"></i>
+        </button>
+        <button type="button" class="help-item" id="helpCancelBtn" onclick="openHelpForm('cancel')">
+          <i class="fas fa-info-circle main-icon"></i>
+          <span class="txt" id="helpCancelTxt">Cancel order</span>
+          <i class="fas fa-chevron-right text-muted" id="helpCancelChevron"></i>
+        </button>
+        <button type="button" class="help-item" onclick="chatWithUs()">
+          <i class="fas fa-comment-dots main-icon"></i>
+          <span class="txt">Chat with us</span>
+          <i class="fas fa-chevron-right text-muted"></i>
+        </button>
+      </div>
+
+      <div class="help-form-panel" id="formPhone">
+        <button type="button" class="back-link mb-3" onclick="backHelpMenu()"><i class="fas fa-arrow-left"></i> Back</button>
+        <label class="form-label fw-semibold small">New phone number</label>
+        <input type="tel" class="form-control" id="helpPhone" placeholder="10-digit mobile">
+        <button type="button" class="btn-save" onclick="savePhoneChange()">Update phone</button>
+      </div>
+
+      <div class="help-form-panel" id="formAddress">
+        <button type="button" class="back-link mb-3" onclick="backHelpMenu()"><i class="fas fa-arrow-left"></i> Back</button>
+        <label class="form-label fw-semibold small">Address</label>
+        <textarea class="form-control mb-2" id="helpAddress" rows="2"></textarea>
+        <div class="row g-2">
+          <div class="col-4"><input type="text" class="form-control" id="helpCity" placeholder="City"></div>
+          <div class="col-4"><input type="text" class="form-control" id="helpState" placeholder="State"></div>
+          <div class="col-4"><input type="text" class="form-control" id="helpPincode" placeholder="Pincode"></div>
+        </div>
+        <button type="button" class="btn-save" onclick="saveAddressChange()">Update address</button>
+      </div>
+
+      <div class="help-form-panel" id="formReschedule">
+        <button type="button" class="back-link mb-3" onclick="backHelpMenu()"><i class="fas fa-arrow-left"></i> Back</button>
+        <label class="form-label fw-semibold small">Preferred delivery date</label>
+        <input type="date" class="form-control" id="helpDate">
+        <label class="form-label fw-semibold small mt-2">Note (optional)</label>
+        <input type="text" class="form-control" id="helpResNote" placeholder="Morning / evening preference">
+        <button type="button" class="btn-save" onclick="saveReschedule()">Request reschedule</button>
+      </div>
+
+      <div class="help-form-panel" id="formCancel">
+        <button type="button" class="back-link mb-3" onclick="backHelpMenu()"><i class="fas fa-arrow-left"></i> Back</button>
+        <p class="text-muted small">You can cancel only before the order is shipped.</p>
+        <label class="form-label fw-semibold small">Reason (optional)</label>
+        <select class="form-control" id="helpCancelReason">
+          <option value="">Select reason</option>
+          <option>Ordered by mistake</option>
+          <option>Found better price</option>
+          <option>Delivery time too long</option>
+          <option>Other</option>
+        </select>
+        <button type="button" class="btn-save" style="background:linear-gradient(135deg,#c62828,#b71c1c)" onclick="confirmCancelOrder()">Cancel this order</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
     <div class="container">
       <div class="row g-4">
         <div class="col-md-4">
@@ -118,87 +350,458 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/supabase-config.js"></script>
-  <script src="js/config.local.js" onerror="window.MELGHAT_CONFIG=window.MELGHAT_CONFIG||{}"></script>
-  <script src="js/chatbot.js"></script>
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/config.local.js" onerror="window.MELGHAT_CONFIG=window.MELGHAT_CONFIG||{}"></script>
+  <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    const session = getSession();
-    if (!session) {
-      document.getElementById("ordersGate").style.display = "block";
-    } else {
-      document.getElementById("ordersContent").style.display = "block";
-      document.getElementById("custName").textContent = session.full_name;
-      loadMyOrders();
+<script>
+  const session = getSession();
+  let allOrders = [];
+  let orderItemsMap = {};
+  let productImageMap = {};
+  let currentOrder = null;
+
+  const STEPS = [
+    { key: "pending", label: "Order Placed", icon: "fa-shopping-bag" },
+    { key: "confirmed", label: "Confirmed", icon: "fa-clock" },
+    { key: "packed", label: "Packed", icon: "fa-box" },
+    { key: "shipped", label: "Shipped", icon: "fa-truck" },
+    { key: "out_for_delivery", label: "Out for Delivery", icon: "fa-paper-plane" },
+    { key: "delivered", label: "Delivered", icon: "fa-check-circle" }
+  ];
+
+  const statusLabel = {
+    pending: "Order Placed", confirmed: "Confirmed", packed: "Packed",
+    shipped: "Shipped", out_for_delivery: "Out for Delivery",
+    delivered: "Delivered", cancelled: "Cancelled", returned: "Returned"
+  };
+
+  function canCancel(status) {
+    return ["pending", "confirmed", "packed"].includes(status);
+  }
+  function canEditDelivery(status) {
+    return ["pending", "confirmed", "packed"].includes(status);
+  }
+
+  if (!session) {
+    document.getElementById("ordersGate").style.display = "block";
+  } else {
+    document.getElementById("ordersContent").style.display = "block";
+    loadMyOrders();
+  }
+
+  function showTab(name) {
+    document.getElementById("tabHistory").classList.toggle("active", name === "history");
+    document.getElementById("tabTrack").classList.toggle("active", name === "track");
+    document.getElementById("panelHistory").classList.toggle("active", name === "history");
+    document.getElementById("panelTrackList").classList.toggle("active", name === "track");
+    document.getElementById("panelTrackDetail").classList.remove("active");
+    if (name === "track") document.getElementById("panelTrackList").classList.add("active");
+  }
+
+  function backToTrackList() {
+    document.getElementById("panelTrackDetail").classList.remove("active");
+    document.getElementById("panelTrackList").classList.add("active");
+    currentOrder = null;
+  }
+
+  function badgeClass(status) {
+    return "mo-badge badge-" + (status || "pending");
+  }
+  function formatDate(d) {
+    if (!d) return "";
+    return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  }
+  function formatDateShort(d) {
+    if (!d) return "";
+    return new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  }
+  function stepIndex(status) {
+    if (status === "cancelled" || status === "returned") return -1;
+    const i = STEPS.findIndex(s => s.key === status);
+    return i >= 0 ? i : 0;
+  }
+  function productTitle(items) {
+    if (!items || !items.length) return "Melghat Honey Order";
+    return [...new Set(items.map(i => i.product_name))].join(", ");
+  }
+  function placeholderImg() {
+    return "images/logo.png";
+  }
+
+  function itemImage(item) {
+    if (!item) return placeholderImg();
+    if (item.product_id && productImageMap[item.product_id]) {
+      return productImageMap[item.product_id];
     }
+    if (item.product_name) {
+      const key = item.product_name.trim().toLowerCase();
+      if (productImageMap[key]) return productImageMap[key];
+    }
+    return placeholderImg();
+  }
+  function firstItemImage(items) {
+    if (!items || !items.length) return placeholderImg();
+    return itemImage(items[0]);
+  }
 
-    const statusColor = {
-      pending: "secondary", confirmed: "primary", packed: "info",
-      shipped: "warning", out_for_delivery: "warning", delivered: "success",
-      cancelled: "danger", returned: "dark"
-    };
+  async function loadMyOrders() {
+    const trackList = document.getElementById("trackList");
+    const histList = document.getElementById("historyList");
+    trackList.innerHTML = '<p class="text-center text-muted py-4">Loading...</p>';
+    histList.innerHTML = "";
 
-    async function loadMyOrders() {
-      const list = document.getElementById("ordersList");
-      list.innerHTML = '<div class="col-12 text-center text-muted">Loading...</div>';
-      try {
-        let rows = await sbGet("orders", `user_id=eq.${session.id}&select=*&order=created_at.desc`);
-        if (!rows.length) {
-          // also match by email for guest-converted
-          rows = await sbGet("orders", `customer_email=eq.${encodeURIComponent(session.email)}&select=*&order=created_at.desc`);
-        }
-        if (!rows.length) {
-          list.innerHTML = `<div class="col-12 text-center py-5">
-            <p class="text-muted">No orders yet.</p>
-            <a href="products.html" class="btn btn-warning">Shop Now</a>
-          </div>`;
-          return;
-        }
-        list.innerHTML = "";
-        for (const o of rows) {
-          let items = [];
-          try {
-            items = await sbGet("order_items", `order_id=eq.${o.id}&select=*`);
-          } catch (e) {}
-          const itemsHtml = items.map(it =>
-            `<li>${it.product_name} (${it.product_size || ""}) × ${it.quantity} — ${formatPrice(it.total_price)}</li>`
-          ).join("") || "<li class='text-muted'>Items on WhatsApp order</li>";
-          const col = statusColor[o.order_status] || "secondary";
-          list.innerHTML += `
-            <div class="col-12">
-              <div class="card border-0 shadow-sm rounded-4 mb-2">
-                <div class="card-body">
-                  <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                    <div>
-                      <h6 class="mb-0 fw-bold">${o.order_number}</h6>
-                      <small class="text-muted">${o.created_at ? new Date(o.created_at).toLocaleString() : ""}</small>
-                    </div>
-                    <span class="badge bg-${col} align-self-start">${o.order_status}</span>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <ul class="small mb-2 ps-3">${itemsHtml}</ul>
-                    </div>
-                    <div class="col-md-6 small">
-                      <p class="mb-1"><strong>Total:</strong> ${formatPrice(o.total_amount)}</p>
-                      <p class="mb-1"><strong>Payment:</strong> ${o.payment_method} (${o.payment_status})</p>
-                      <p class="mb-1"><strong>Ship to:</strong> ${o.shipping_address || "-"}</p>
-                      ${o.tracking_number ? `<p class="mb-1"><strong>Tracking:</strong> ${o.tracking_number} ${o.courier_name ? "("+o.courier_name+")" : ""}</p>` : ""}
-                      ${o.notes ? `<p class="mb-0 text-muted">${o.notes}</p>` : ""}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>`;
-        }
-      } catch (e) {
-        list.innerHTML = `<div class="col-12 text-danger">Failed to load orders: ${e.message}</div>`;
+    try {
+      let rows = await sbGet("orders", `user_id=eq.${session.id}&select=*&order=created_at.desc`);
+      if (!rows.length && session.email) {
+        rows = await sbGet("orders", `customer_email=eq.${encodeURIComponent(session.email)}&select=*&order=created_at.desc`);
       }
+      allOrders = rows || [];
+
+      if (!allOrders.length) {
+        trackList.innerHTML = `<div class="text-center py-5">
+          <p class="text-muted">No orders yet.</p>
+          <a href="products.html" class="btn btn-warning">Shop Now</a>
+        </div>`;
+        return;
+      }
+
+      orderItemsMap = {};
+      for (const o of allOrders) {
+        try {
+          orderItemsMap[o.id] = await sbGet("order_items", `order_id=eq.${o.id}&select=*`) || [];
+        } catch (e) {
+          orderItemsMap[o.id] = [];
+        }
+      }
+
+      productImageMap = {};
+      try {
+        const prods = await sbGet("products", "select=id,name,image_url");
+        (prods || []).forEach(p => {
+          if (!p.image_url) return;
+          if (p.id) productImageMap[p.id] = p.image_url;
+          if (p.name) productImageMap[p.name.trim().toLowerCase()] = p.image_url;
+        });
+      } catch (e) {
+        console.warn("Could not load product images", e);
+      }
+
+      // ===== TRACK LIST =====
+      trackList.innerHTML = allOrders.map(o => {
+        const items = orderItemsMap[o.id] || [];
+        const st = o.order_status || "pending";
+        return `
+          <div class="mo-card" onclick="openTrack('${o.id}')">
+            <img src="${firstItemImage(items)}" alt="" onerror="this.src='images/favicon.png'">
+            <div class="info">
+              <h6>${productTitle(items)}</h6>
+              <small>${formatDate(o.created_at)} · #${o.order_number}</small>
+            </div>
+            <span class="${badgeClass(st)}">${statusLabel[st] || st}</span>
+            <i class="fas fa-chevron-right text-muted ms-1"></i>
+          </div>`;
+      }).join("");
+
+      // ===== ORDER HISTORY (now with image + proper name) =====
+      histList.innerHTML = allOrders.map(o => {
+        const items = orderItemsMap[o.id] || [];
+        const st = o.order_status || "pending";
+        const itemsHtml = items.map(it =>
+          `<div class="small text-muted">${it.product_name} (${it.product_size || ""}) × ${it.quantity} — ${formatPrice(it.total_price)}</div>`
+        ).join("") || '<div class="small text-muted">—</div>';
+
+        return `
+          <div class="mo-card" style="cursor:pointer;align-items:flex-start" onclick="openTrack('${o.id}')">
+            <img src="${firstItemImage(items)}" alt="" onerror="this.src='images/favicon.png'" style="margin-top:2px">
+            <div class="info" style="flex:1;min-width:0">
+              <div class="d-flex justify-content-between align-items-start gap-2">
+                <div>
+                  <h6 class="mb-0 fw-bold" style="color:#3e2723">${productTitle(items)}</h6>
+                  <small class="text-muted">${formatDate(o.created_at)} · #${o.order_number}</small>
+                </div>
+                <span class="${badgeClass(st)}">${statusLabel[st] || st}</span>
+              </div>
+              <div class="mt-2">${itemsHtml}</div>
+              <div class="d-flex justify-content-between mt-2 small">
+                <span class="text-muted">${o.payment_method || ""} · ${o.payment_status || ""}</span>
+                <strong style="color:#3e2723">${formatPrice(o.total_amount)}</strong>
+              </div>
+            </div>
+          </div>`;
+      }).join("");
+
+    } catch (e) {
+      trackList.innerHTML = `<p class="text-danger">Failed to load: ${e.message}</p>`;
     }
-  </script>
+  }
+
+  function openTrack(orderId) {
+    const o = allOrders.find(x => x.id === orderId);
+    if (!o) return;
+    currentOrder = o;
+    const items = orderItemsMap[o.id] || [];
+    const st = o.order_status || "pending";
+    const idx = stepIndex(st);
+    const progW = idx < 0 ? 0 : (idx / (STEPS.length - 1)) * 84;
+    const eta = o.created_at
+      ? formatDateShort(new Date(new Date(o.created_at).getTime() + 5 * 86400000))
+      : "—";
+    const loc = [o.city, o.pincode || o.state].filter(Boolean).join(", ") || o.shipping_address || "";
+
+    let timeline = `
+      <div class="track-line">
+        <div class="prog" style="width:${progW}%"></div>
+        ${STEPS.map((s, i) => {
+          let cls = "";
+          if (idx >= 0) {
+            if (i < idx) cls = "done";
+            else if (i === idx) cls = "current";
+          }
+          const dateTxt = i === 0 ? formatDateShort(o.created_at)
+            : (i === idx && st === "delivered" ? formatDateShort(o.updated_at || o.created_at)
+            : (i < idx ? "Done" : "Pending"));
+          return `<div class="t-step ${cls}">
+            <div class="icon"><i class="fas ${s.icon}"></i></div>
+            <div class="lbl">${s.label}</div>
+            <div class="date">${dateTxt}</div>
+          </div>`;
+        }).join("")}
+      </div>`;
+
+    if (st === "cancelled") {
+      timeline = `<p class="text-danger mt-3"><i class="fas fa-ban me-1"></i> This order was cancelled.</p>`;
+    }
+
+    const itemsHtml = items.map(it => `
+      <div class="item-row">
+        <img src="${itemImage(it)}" onerror="this.src='images/favicon.png'">
+        <div class="flex-grow-1">
+          <div class="fw-semibold" style="color:#3e2723">${it.product_name}</div>
+          <small class="text-muted">${it.product_size || ""} · Qty ${it.quantity}</small>
+        </div>
+        <div class="fw-semibold" style="color:#c9a227">${formatPrice(it.total_price)}</div>
+      </div>
+    `).join("") || `<p class="text-muted small">No line items</p>`;
+
+    document.getElementById("trackDetail").innerHTML = `
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+        <div>
+          <h5 class="fw-bold mb-1" style="color:#3e2723">${productTitle(items)}</h5>
+          <small class="text-muted">
+            <i class="far fa-calendar me-1"></i> Ordered ${formatDate(o.created_at)}
+            ${loc ? ` · <i class="fas fa-map-marker-alt me-1"></i>${loc}` : ""}
+          </small>
+          <div class="small text-muted mt-1">Order #${o.order_number}</div>
+        </div>
+        <span class="${badgeClass(st)}">${statusLabel[st] || st}</span>
+      </div>
+
+      <div class="status-banner">
+        <div>
+          <small class="text-uppercase text-muted" style="letter-spacing:1px;font-size:0.7rem">Current Status</small>
+          <h4>${statusLabel[st] || st}</h4>
+          <small class="text-muted">${st === "pending" ? "Order received" : (o.tracking_number ? "Tracking: " + o.tracking_number : "")}</small>
+        </div>
+        <div class="eta-box">
+          <small>Estimated Delivery</small>
+          <strong>${eta}</strong>
+        </div>
+      </div>
+
+      ${timeline}
+
+      <h6 class="fw-semibold mt-3 mb-2" style="color:#3e2723">Items in this delivery</h6>
+      ${itemsHtml}
+
+      <div class="total-bar mt-3">
+        <span>Total Paid</span>
+        <span style="color:#c9a227">${formatPrice(o.total_amount)}</span>
+      </div>
+      ${o.notes ? `<p class="small text-muted mt-2 mb-0">${o.notes}</p>` : ""}
+
+      <button type="button" class="btn-help" onclick="openHelp()">
+        <i class="fas fa-headset me-2"></i>Need help?
+      </button>
+    `;
+
+    document.getElementById("panelTrackList").classList.remove("active");
+    document.getElementById("panelTrackDetail").classList.add("active");
+  }
+
+  function openHelp() {
+    if (!currentOrder) return;
+    const st = currentOrder.order_status || "pending";
+    const cancelBtn = document.getElementById("helpCancelBtn");
+    const cancelTxt = document.getElementById("helpCancelTxt");
+    const chev = document.getElementById("helpCancelChevron");
+
+    if (canCancel(st)) {
+      cancelBtn.classList.remove("disabled");
+      cancelBtn.onclick = function () { openHelpForm("cancel"); };
+      cancelTxt.innerHTML = "Cancel order";
+      chev.style.display = "";
+    } else {
+      cancelBtn.classList.add("disabled");
+      cancelBtn.onclick = null;
+      cancelTxt.innerHTML = "Cancellation not allowed<br><small>Only allowed before shipment.</small>";
+      chev.style.display = "none";
+    }
+
+    backHelpMenu();
+    document.getElementById("helpOverlay").classList.add("open");
+  }
+
+  function closeHelp() {
+    document.getElementById("helpOverlay").classList.remove("open");
+    backHelpMenu();
+  }
+
+  function backHelpMenu() {
+    document.getElementById("helpTitle").textContent = "Need help?";
+    document.getElementById("helpMenu").style.display = "block";
+    document.querySelectorAll(".help-form-panel").forEach(function (p) { p.classList.remove("active"); });
+  }
+
+  function openHelpForm(type) {
+    const st = currentOrder ? (currentOrder.order_status || "pending") : "pending";
+
+    if ((type === "phone" || type === "address" || type === "reschedule") && !canEditDelivery(st)) {
+      alert("Changes are only allowed before the order is shipped.");
+      return;
+    }
+    if (type === "cancel" && !canCancel(st)) {
+      alert("Cancellation is only allowed before shipment.");
+      return;
+    }
+
+    document.getElementById("helpMenu").style.display = "none";
+    document.querySelectorAll(".help-form-panel").forEach(function (p) { p.classList.remove("active"); });
+
+    if (type === "phone") {
+      document.getElementById("helpTitle").textContent = "Change Phone Number";
+      document.getElementById("helpPhone").value = currentOrder.customer_phone || "";
+      document.getElementById("formPhone").classList.add("active");
+    } else if (type === "address") {
+      document.getElementById("helpTitle").textContent = "Change delivery address";
+      document.getElementById("helpAddress").value = currentOrder.shipping_address || "";
+      document.getElementById("helpCity").value = currentOrder.city || "";
+      document.getElementById("helpState").value = currentOrder.state || "";
+      document.getElementById("helpPincode").value = currentOrder.pincode || "";
+      document.getElementById("formAddress").classList.add("active");
+    } else if (type === "reschedule") {
+      document.getElementById("helpTitle").textContent = "Reschedule delivery";
+      document.getElementById("formReschedule").classList.add("active");
+    } else if (type === "cancel") {
+      document.getElementById("helpTitle").textContent = "Cancel order";
+      document.getElementById("formCancel").classList.add("active");
+    }
+  }
+
+  async function savePhoneChange() {
+    var phone = document.getElementById("helpPhone").value.trim();
+    if (!phone || phone.length < 10) { alert("Enter a valid phone number"); return; }
+    try {
+      await sbPatch("orders", "id=eq." + currentOrder.id, {
+        customer_phone: phone,
+        updated_at: new Date().toISOString()
+      });
+      currentOrder.customer_phone = phone;
+      alert("Phone number updated.");
+      closeHelp();
+      await loadMyOrders();
+      openTrack(currentOrder.id);
+    } catch (e) {
+      alert("Could not update: " + e.message);
+    }
+  }
+
+  async function saveAddressChange() {
+    var address = document.getElementById("helpAddress").value.trim();
+    if (!address) { alert("Address is required"); return; }
+    var city = document.getElementById("helpCity").value.trim();
+    var state = document.getElementById("helpState").value.trim();
+    var pincode = document.getElementById("helpPincode").value.trim();
+    try {
+      await sbPatch("orders", "id=eq." + currentOrder.id, {
+        shipping_address: address,
+        city: city || null,
+        state: state || null,
+        pincode: pincode || null,
+        updated_at: new Date().toISOString()
+      });
+      currentOrder.shipping_address = address;
+      currentOrder.city = city;
+      currentOrder.state = state;
+      currentOrder.pincode = pincode;
+      alert("Delivery address updated.");
+      closeHelp();
+      await loadMyOrders();
+      openTrack(currentOrder.id);
+    } catch (e) {
+      alert("Could not update: " + e.message);
+    }
+  }
+
+  async function saveReschedule() {
+    var date = document.getElementById("helpDate").value;
+    var note = document.getElementById("helpResNote").value.trim();
+    if (!date) { alert("Please select a date"); return; }
+    var noteLine = "RESCHEDULE request: preferred " + date + (note ? " · " + note : "");
+    var notes = (currentOrder.notes ? currentOrder.notes + " | " : "") + noteLine;
+    try {
+      await sbPatch("orders", "id=eq." + currentOrder.id, {
+        notes: notes,
+        updated_at: new Date().toISOString()
+      });
+      currentOrder.notes = notes;
+      var msg = "Reschedule request\nOrder: " + currentOrder.order_number + "\nPreferred date: " + date + "\n" + (note || "");
+      window.open("https://wa.me/919699544383?text=" + encodeURIComponent(msg), "_blank");
+      alert("Reschedule request submitted. Our team will confirm.");
+      closeHelp();
+    } catch (e) {
+      alert("Could not submit: " + e.message);
+    }
+  }
+
+  async function confirmCancelOrder() {
+    if (!currentOrder || !canCancel(currentOrder.order_status || "pending")) {
+      alert("Cancellation is only allowed before shipment.");
+      return;
+    }
+    if (!confirm("Cancel order " + currentOrder.order_number + "?")) return;
+    var reason = document.getElementById("helpCancelReason").value;
+    var notes = (currentOrder.notes ? currentOrder.notes + " | " : "") +
+      "CANCELLED by customer" + (reason ? ": " + reason : "");
+    try {
+      await sbPatch("orders", "id=eq." + currentOrder.id, {
+        order_status: "cancelled",
+        notes: notes,
+        updated_at: new Date().toISOString()
+      });
+      currentOrder.order_status = "cancelled";
+      currentOrder.notes = notes;
+      alert("Order cancelled.");
+      closeHelp();
+      await loadMyOrders();
+      openTrack(currentOrder.id);
+    } catch (e) {
+      alert("Could not cancel: " + e.message);
+    }
+  }
+
+  function chatWithUs() {
+    var o = currentOrder;
+    var msg = "Hello Melghat Honey, I need help with my order.";
+    if (o) msg += "\nOrder: " + o.order_number + "\nStatus: " + o.order_status;
+    window.open("https://wa.me/919699544383?text=" + encodeURIComponent(msg), "_blank");
+    closeHelp();
+  }
+</script>
 </body>
 </html>
