@@ -55,9 +55,28 @@
             <div class="col-md-4"><label class="form-label">Category *</label>
               <select class="form-select" id="pCategory"></select>
             </div>
-            <div class="col-md-4"><label class="form-label">Size *</label>
-              <select class="form-select" id="pSize"><option>100ml</option><option>250ml</option><option>500ml</option><option>1kg</option></select>
-            </div>
+           <div class="col-md-4">
+  <label class="form-label">Size *</label>
+  <input type="text" class="form-control" id="pSize" 
+         placeholder="e.g. 100ml, 250ml, 500g, 1kg, 2 liter" 
+         list="sizeSuggestions">
+  <datalist id="sizeSuggestions">
+    <option value="50ml">
+    <option value="100ml">
+    <option value="200ml">
+    <option value="250ml">
+    <option value="500ml">
+    <option value="750ml">
+    <option value="1 liter">
+    <option value="100g">
+    <option value="250g">
+    <option value="500g">
+    <option value="1kg">
+    <option value="2kg">
+    <option value="5kg">
+  </datalist>
+  <small class="text-muted">Type any size: ml, liter, g, kg</small>
+</div>
             <div class="col-md-4"><label class="form-label">Price (₹) *</label><input type="number" class="form-control" id="pPrice"></div>
             <div class="col-md-4"><label class="form-label">MRP</label><input type="number" class="form-control" id="pMrp"></div>
             <div class="col-md-4"><label class="form-label">Stock</label><input type="number" class="form-control" id="pStock" value="0"></div>
@@ -167,32 +186,34 @@
     function editProduct(p) { openProductModal(p); }
 
     async function saveProduct() {
-      const id = document.getElementById("prodId").value;
-      const data = {
-        name: document.getElementById("pName").value.trim(),
-        slug: document.getElementById("pSlug").value.trim(),
-        badge: document.getElementById("pCategory").value,
-        category: document.getElementById("pCategory").value,
-        category: document.getElementById("pCategory").value,
-        size: document.getElementById("pSize").value,
-        price: Number(document.getElementById("pPrice").value),
-        mrp: document.getElementById("pMrp").value ? Number(document.getElementById("pMrp").value) : null,
-        stock: Number(document.getElementById("pStock").value) || 0,
-        sku: document.getElementById("pSku").value.trim() || null,
-        short_desc: document.getElementById("pShort").value.trim() || null,
-        description: document.getElementById("pDesc").value.trim() || null,
-        image_url: document.getElementById("pImg").value.trim() || null,
-        is_active: document.getElementById("pActive").checked,
-        is_featured: document.getElementById("pFeatured").checked
-      };
-      if (!data.name || !data.slug || !data.price) { alert("Name, slug and price are required"); return; }
-      try {
-        if (id) await updateProduct(id, data);
-        else await createProduct(data);
-        bootstrap.Modal.getInstance(document.getElementById("prodModal")).hide();
-        loadProducts();
-      } catch (e) { alert("Save failed: " + e.message); }
-    }
+  const id = document.getElementById("prodId").value;
+  const data = {
+    name: document.getElementById("pName").value.trim(),
+    slug: document.getElementById("pSlug").value.trim(),
+    badge: document.getElementById("pCategory").value,
+    category: document.getElementById("pCategory").value,
+    size: document.getElementById("pSize").value.trim(),   // free text
+    price: Number(document.getElementById("pPrice").value),
+    mrp: document.getElementById("pMrp").value ? Number(document.getElementById("pMrp").value) : null,
+    stock: Number(document.getElementById("pStock").value) || 0,
+    sku: document.getElementById("pSku").value.trim() || null,
+    short_desc: document.getElementById("pShort").value.trim() || null,
+    description: document.getElementById("pDesc").value.trim() || null,
+    image_url: document.getElementById("pImg").value.trim() || null,
+    is_active: document.getElementById("pActive").checked,
+    is_featured: document.getElementById("pFeatured").checked
+  };
+  if (!data.name || !data.slug || !data.price || !data.size) {
+    alert("Name, slug, size and price are required");
+    return;
+  }
+  try {
+    if (id) await updateProduct(id, data);
+    else await createProduct(data);
+    bootstrap.Modal.getInstance(document.getElementById("prodModal")).hide();
+    loadProducts();
+  } catch (e) { alert("Save failed: " + e.message); }
+}
 
     
     document.getElementById("pImg")?.addEventListener("input", function() {
