@@ -263,7 +263,7 @@
     </div>
   </section>
 
-  <!-- Padma Shri / Award section — photos clear, no filenames -->
+  <!-- Padma Shri / Award + Certificates + Licences -->
   <section class="award-section py-5">
     <div class="container position-relative">
       <div class="text-center mb-5 fade-in">
@@ -278,7 +278,7 @@
         <div class="col-lg-6 fade-in">
           <div class="award-photo-card main-photo" id="mainAwardCard">
             <img id="mainAwardImg"
-                 src="https://dmehkoxuczhfhnjinniy.supabase.co/storage/v1/object/public/certificates/1790750542262-n94o7k.jpeg"
+                 src="images/awards/melghat_Award.jpg.jpeg"
                  alt="Padma Shri award"
                  onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900';this.style.minHeight='280px'">
           </div>
@@ -291,7 +291,7 @@
         </div>
       </div>
 
-      <!-- Extra award photos from storage (no names shown) -->
+      <!-- Gallery: awards + certificates + licences (no filenames shown) -->
       <div class="award-gallery" id="awardGallery"></div>
 
       <div class="row g-3 mt-5 fade-in">
@@ -317,10 +317,10 @@
     </div>
   </section>
 
-  <!-- Certificate logos only (icons, no filenames) -->
+  <!-- Certificate / Licence logos section (shown if logos exist) -->
   <section class="py-4" id="certLogoSection" style="display:none;background:#faf6ee">
     <div class="container text-center">
-      <h5 class="fw-bold mb-3" style="color:var(--dark-brown)">Certifications</h5>
+      <h5 class="fw-bold mb-3" style="color:var(--dark-brown)">Certifications &amp; Licences</h5>
       <div class="cert-logo-row" id="certLogoRow"></div>
     </div>
   </section>
@@ -461,81 +461,40 @@
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        if (typeof fetchCertificateImages !== "function") return;
-        const certs = await fetchCertificateImages();
-        if (!certs || !certs.length) return;
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Keep the main Padma Shri award image as-is (do NOT overwrite it)
+    // Main image is already set in HTML: images/awards/melghat_Award.jpg.jpeg
 
-        const split = typeof splitCertificateAssets === "function"
-          ? splitCertificateAssets(certs)
-          : { logos: [], awards: certs };
+    // The 3 certificate / licence / logo images from the bucket
+    const CERT_BASE = "https://dmehkoxuczhfhnjinniy.supabase.co/storage/v1/object/public/certificates/";
 
-        // Classify: ceremony photo vs document vs logo
-        const all = certs.slice();
-        const isLogo = (c) => /fssai|agmark|logo|seal|badge|iso|organic|mark/i.test((c.name||"")+" "+(c.path||""));
-        const isDoc = (c) => /cert|award|document|pdf|national|excellence|padma/i.test((c.name||"")+" "+(c.path||"")) && !isLogo(c);
-        const logos = all.filter(isLogo);
-        const docs = all.filter(c => isDoc(c) && !isLogo(c));
-        const photos = all.filter(c => !isLogo(c) && !isDoc(c));
-        // Prefer large ceremony-style images for main
-        const mainPool = photos.length ? photos : (docs.length ? docs : all);
-        const main = document.getElementById("mainAwardImg");
-        if (main && mainPool[0]) {
-          main.src = mainPool[0].url;
-          main.alt = "Padma Shri award ceremony";
-          main.style.objectFit = "contain";
-        }
-        // Gallery: remaining photos + docs + logos — white cards, full image visible, no names
-        const gallery = document.getElementById("awardGallery");
-        if (gallery) {
-          const rest = [];
-          mainPool.slice(1).forEach(c => rest.push({...c, kind: "photo"}));
-          docs.filter(c => c.url !== (mainPool[0] && mainPool[0].url)).forEach(c => rest.push({...c, kind: "doc"}));
-          logos.forEach(c => rest.push({...c, kind: "logo"}));
-          // If only one item was used as main, still show logos/docs
-          if (!rest.length) {
-            all.filter(c => c.url !== (mainPool[0] && mainPool[0].url)).forEach(c => {
-              rest.push({...c, kind: isLogo(c) ? "logo" : (isDoc(c) ? "doc" : "photo")});
-            });
-          }
-          gallery.innerHTML = rest.slice(0, 6).map(c => `
-            <div class="award-photo-card ${c.kind === "logo" ? "is-logo" : ""} ${c.kind === "doc" ? "is-doc" : ""}">
-              <img src="${c.url}" alt="" loading="lazy"
-                   onerror="this.parentElement.style.display='none'">
-            </div>`).join("");
-        }
-        // Hide separate cert logo section if gallery already has logos
-        const sec = document.getElementById("certLogoSection");
-        if (sec) sec.style.display = "none";
-      } catch (e) { console.warn(e); }
-    });
-  </script>
+    const galleryImages = [
+      {
+        url: CERT_BASE + "1790752317368-s3j1oz.jpg",
+        kind: "doc"   // certificate / licence
+      },
+      {
+        url: CERT_BASE + "1790752579681-xd75u7.png",
+        kind: "logo"
+      },
+      {
+        url: CERT_BASE + "1790752795628-1d5bps.png",
+        kind: "logo"
+      }
+    ];
 
-  <!-- <script>
-    // Story collage: use marketing/product honey images when available
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        let urls = [];
-        if (typeof fetchMarketingImages === "function") {
-          const m = await fetchMarketingImages();
-          urls = (m || []).map(x => x.url).filter(Boolean);
-        }
-        if (urls.length < 3 && typeof fetchProductBucketImages === "function") {
-          const pr = await fetchProductBucketImages();
-          urls = urls.concat((pr || []).map(x => x.url).filter(Boolean));
-        }
-        urls = [...new Set(urls)];
-        const main = document.getElementById("aboutImgMain");
-        const up = document.getElementById("aboutImgUp");
-        const down = document.getElementById("aboutImgDown");
-        if (urls[0] && main) main.src = urls[0];
-        if (urls[1] && up) up.src = urls[1];
-        if (urls[2] && down) down.src = urls[2];
-      } catch (e) {}
-    });
-  </script> -->
-
+    // Show only these 3 images in the gallery below the main award
+    const gallery = document.getElementById("awardGallery");
+    if (gallery) {
+      gallery.innerHTML = galleryImages.map(c => `
+        <div class="award-photo-card ${c.kind === "logo" ? "is-logo" : "is-doc"}">
+          <img src="${c.url}" alt="" loading="lazy"
+               onerror="this.parentElement.style.display='none'">
+        </div>
+      `).join("");
+    }
+  });
+</script>
 </body>
 </html>
