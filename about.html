@@ -6,7 +6,7 @@
   <link rel="icon" href="images/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <title>Our Story | Melghat Honey</title>
-  <meta name="description" content="The story of Melghat Honey — pure forest honey from tribal Maharashtra, inspired by the Padma Shri awarded 1 Rupee Doctors of Melghat.">
+  <meta name="description" content="The story of Melghat Honey — pure forest honey from tribal Maharashtra by Pragati Bahuuddeshiya Sanstha. National Award winners, SFURTI cluster, FSSAI & Agmark certified.">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -172,12 +172,206 @@
     }
 
     .cert-logo-row {
-      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center;
+      display: flex; flex-wrap: wrap; gap: 36px; justify-content: center; align-items: center;
     }
     .cert-logo-row img {
-      width: 80px; height: 80px; object-fit: contain;
-      background: #fff; border-radius: 14px; padding: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid #f0e6d0;
+      width: 140px; height: 140px; object-fit: contain;
+      background: #fff; border-radius: 20px; padding: 16px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.1); border: 1px solid #f0e6d0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: logoBounce 2.4s ease-in-out infinite;
+    }
+    .cert-logo-row img:nth-child(2) {
+      animation-delay: 0.35s;
+    }
+    .cert-logo-row img:hover {
+      transform: scale(1.12) translateY(-6px);
+      animation-play-state: paused;
+    }
+    @keyframes logoBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .visual-card {
+      background: linear-gradient(145deg, #fff 0%, #faf6ee 100%);
+      border-radius: 16px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+      border: 1px solid #f0e6d0;
+      height: 100%;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+    }
+    .visual-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+      border-color: rgba(244,180,0,0.45);
+    }
+    .visual-card .v-icon {
+      width: 72px; height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(244,180,0,0.2), rgba(46,125,50,0.15));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      color: #2e7d32;
+      margin-bottom: 18px;
+    }
+    .visual-card .v-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #3e2723;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .visual-card .v-meta {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.45;
+      margin-bottom: 4px;
+    }
+    .visual-card .v-year {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #b8860b;
+      background: rgba(244,180,0,0.12);
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-top: 12px;
+    }
+
+    /* New styles for enhanced sections */
+    .timeline-award {
+      position: relative;
+      padding-left: 28px;
+      border-left: 3px solid rgba(244,180,0,0.4);
+      margin-bottom: 28px;
+    }
+    .timeline-award::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #f4b400;
+      box-shadow: 0 0 0 4px rgba(244,180,0,0.25);
+    }
+    .timeline-award .year {
+      font-weight: 700;
+      color: #f4b400;
+      font-size: 1.1rem;
+    }
+    .cert-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 18px;
+      height: 100%;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.07);
+      border: 1px solid #f0e6d0;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .cert-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 32px rgba(78,52,46,0.14);
+      border-color: var(--honey-gold, #f4b400);
+    }
+    .cert-card .cert-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(244,180,0,0.18), rgba(46,125,50,0.12));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem;
+      color: #2e7d32;
+      margin: 0 auto 14px;
+    }
+    .cert-card h6 { font-weight: 700; color: #3e2723; margin-bottom: 6px; }
+    .cert-card .cert-no {
+      font-size: 0.8rem;
+      color: #666;
+      word-break: break-all;
+    }
+    .doc-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+    }
+    .doc-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+      border: 1px solid #f0e6d0;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+    .doc-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+      border-color: rgba(244,180,0,0.45);
+    }
+    .doc-card img {
+      width: 100%;
+      height: 240px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: #faf6ee;
+      padding: 10px;
+    }
+    .doc-card .doc-caption {
+      padding: 16px 18px;
+      text-align: left;
+      background: #fff;
+      border-top: 1px solid #f0e6d0;
+      flex-grow: 1;
+    }
+    .doc-card .doc-caption .doc-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #3e2723;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .doc-card .doc-caption .doc-meta {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 2px;
+    }
+    .doc-card .doc-caption .doc-year {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #b8860b;
+      background: rgba(244,180,0,0.12);
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+    .history-highlight {
+      background: linear-gradient(135deg, #faf6ee 0%, #fff8e7 100%);
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid rgba(244,180,0,0.2);
+    }
+    .org-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(46,125,50,0.1);
+      color: #1b5e20;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
     }
 
     @media (max-width: 768px) {
@@ -188,6 +382,7 @@
       .overlap-card.float-down { width: 50%; height: 160px; }
       .stat-box .num { font-size: 1.7rem; }
       .award-photo-card img { max-height: 300px; }
+      .doc-card img { height: 180px; }
     }
   </style>
 </head>
@@ -229,10 +424,11 @@
     <div class="container fade-in">
       <p class="text-uppercase mb-2" style="letter-spacing:3px;font-size:0.85rem;color:#f4b400">Our Story</p>
       <h1>From Forest to Your Home</h1>
-      <p class="lead mt-3">Discover the journey of pure, natural honey from the heart of Melghat</p>
+      <p class="lead mt-3">Pure wild forest honey · Harvested by tribal communities of Melghat · Empowering livelihoods since 1999</p>
     </div>
   </section>
 
+  <!-- Our Story / Organization -->
   <section class="py-5">
     <div class="container">
       <div class="row align-items-center g-5">
@@ -242,7 +438,7 @@
               <img src="images/nature/deu0p.jpg" alt="Melghat forest landscape" id="aboutImgMain">
             </div>
             <div class="overlap-card float-up">
-              <img src="images/nature/zBdci.jpg" alt="Pure honey jars" id="aboutImgUp">
+              <img src="images/nature/zBdci.jpeg" alt="Pure honey jars" id="aboutImgUp">
             </div>
             <div class="overlap-card float-down">
               <img src="images/nature/D2huo.jpg" alt="Honey dipper and jar" id="aboutImgDown">
@@ -250,81 +446,322 @@
           </div>
         </div>
         <div class="col-lg-6 fade-in">
-          <h2 class="fw-bold" style="color:var(--dark-brown)">Our Story</h2>
-          <p class="mt-3 text-muted">Melghat Honey is sourced from the pristine forests of Melghat, Maharashtra, where indigenous tribal communities have been harvesting honey for generations. Our honey is naturally harvested from wild bee colonies, ensuring the highest quality and purity.</p>
-          <p class="text-muted">We work directly with tribal communities, providing them with fair compensation and supporting sustainable harvesting practices. Every jar of Melghat Honey represents a commitment to nature, tradition, and community welfare.</p>
+          <span class="org-badge mb-3"><i class="fas fa-landmark"></i> Pragati Bahuuddeshiya Sanstha</span>
+          <h2 class="fw-bold" style="color:var(--dark-brown)">Rooted in Melghat Forests</h2>
+          <p class="mt-3 text-muted">Melghat Honey is the proud brand of <strong>Pragati Bahuuddeshiya Sanstha (PBS)</strong>, a registered public charitable trust and society working since 1999 in the tribal heartland of Maharashtra. We work directly with indigenous communities — primarily Korku and other tribes of the Melghat region — who have harvested wild rockbee honey for generations.</p>
+          <p class="text-muted">Under the Government of India’s <strong>SFURTI</strong> (Scheme of Fund for Regeneration of Traditional Industries) programme of the Khadi & Village Industries Commission (KVIC), we established a dedicated beekeeping cluster. Our focus has always been on <em>non-destructive, scientific and sustainable</em> harvesting that protects rockbee colonies while delivering pure, high-quality honey.</p>
           <ul class="list-unstyled mt-4">
-            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Wild forest origin · Melghat Tiger Reserve</li>
-            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Harvested by indigenous Korku communities</li>
-            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Raw, unprocessed &amp; lab-tested purity</li>
+            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Wild forest origin · Melghat Tiger Reserve region</li>
+            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Harvested by trained tribal honey hunters</li>
+            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Raw · Unprocessed · Lab-tested purity</li>
+            <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Exported to Dubai &amp; Japan for years</li>
           </ul>
+        </div>
+      </div>
+
+      <!-- Key facts highlight -->
+      <div class="history-highlight mt-5 fade-in">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <h5 class="fw-bold" style="color:var(--dark-brown)"><i class="fas fa-users me-2" style="color:#f4b400"></i>Tribal Empowerment</h5>
+            <p class="text-muted mb-0 small">Over 800 tribals trained in scientific honey collection. 2000+ artisans trained across 11 districts of Vidarbha with support from TRIFED &amp; TDC. Hundreds of Self-Help Groups formed.</p>
+          </div>
+          <div class="col-md-4">
+            <h5 class="fw-bold" style="color:var(--dark-brown)"><i class="fas fa-leaf me-2" style="color:#f4b400"></i>Sustainable Harvesting</h5>
+            <p class="text-muted mb-0 small">Traditional crude methods destroyed colonies. We introduced nature-friendly techniques so that rockbee colonies thrive while communities earn a dignified livelihood from honey &amp; beeswax.</p>
+          </div>
+          <div class="col-md-4">
+            <h5 class="fw-bold" style="color:var(--dark-brown)"><i class="fas fa-globe me-2" style="color:#f4b400"></i>From Forest to World</h5>
+            <p class="text-muted mb-0 small">Melghat Honey is sold across major Indian cities and has been regularly exported to Dubai and Japan — a testament to its unmatched purity and quality.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Padma Shri / Award + Certificates + Licences -->
+  <!-- National Award 2005 - Main Highlight -->
   <section class="award-section py-5">
     <div class="container position-relative">
       <div class="text-center mb-5 fade-in">
         <div class="award-badge mb-3">
-          <i class="fas fa-medal"></i> Padma Shri Award
+          <i class="fas fa-medal"></i> National Excellence Award
         </div>
-        <h2 class="fw-bold">India's 4th Highest Civilian Honor</h2>
-        <p class="opacity-75 mt-2 mb-0" style="max-width:700px;margin:0 auto">The 1 Rupee Doctors of Melghat</p>
+        <h2 class="fw-bold">Honoured by the President of India</h2>
+        <p class="opacity-75 mt-2 mb-0" style="max-width:700px;margin:0 auto">National Award for Excellence in Khadi &amp; Village Industries · 2005</p>
       </div>
 
       <div class="row align-items-center g-5">
         <div class="col-lg-6 fade-in">
-          <div class="award-photo-card main-photo" id="mainAwardCard">
-            <img id="mainAwardImg"
-                 src="images/awards/melghat_Award.jpg.jpeg"
-                 alt="Padma Shri award"
-                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=900';this.style.minHeight='280px'">
+          <div class="award-photo-card main-photo">
+            <img src="images/awards/melghat_Award.jpg.jpeg"
+                 alt="National Award 2005 presented by President A.P.J. Abdul Kalam"
+                 style="max-height:420px; object-fit:contain; background:#1a120f;">
           </div>
         </div>
         <div class="col-lg-6 fade-in">
-          <h3 class="fw-bold mb-3" style="color:#f4b400">Dr. Ravindra Kolhe &amp; Dr. Smita Kolhe</h3>
-          <p class="opacity-90">Honored with the prestigious <strong>Padma Shri in 2019</strong> by President Ram Nath Kovind for their extraordinary dedication to tribal healthcare in Melghat, Maharashtra.</p>
-          <p class="opacity-90">Known as the <strong>“1 Rupee Doctors,”</strong> this remarkable couple has served the tribal communities for over 35 years, charging just one rupee per consultation. Their selfless work has dramatically reduced infant mortality rates and combated severe malnutrition in one of India's most challenging regions.</p>
-          <p class="opacity-90 mb-0">Their unwavering commitment to healthcare accessibility and community welfare inspired us to support the same communities through ethical honey sourcing — ensuring fair compensation and sustainable livelihoods for tribal families.</p>
+          <h3 class="fw-bold mb-3" style="color:#f4b400">Dhanraj Koche</h3>
+          <p class="opacity-90"><strong>Pragati Bahuuddeshiya Sanstha, Wardha (Maharashtra)</strong></p>
+          <p class="opacity-90">Conferred the prestigious <strong>National Excellence Award 2005</strong> by Hon’ble President of India <strong>Dr. A.P.J. Abdul Kalam</strong> at the National Convention of Small Scale &amp; Rural Industries, New Delhi (28 October 2005).</p>
+          <p class="opacity-90">The award was given for outstanding excellence in the field of Khadi and Village Industries — recognising our pioneering work in scientific honey collection, processing and marketing with tribal communities of Melghat.</p>
+          <p class="opacity-90 mb-0">This remains one of the highest national recognitions received by any organisation working in the traditional forest-honey sector.</p>
         </div>
       </div>
 
-      <!-- Gallery: awards + certificates + licences (no filenames shown) -->
-      <div class="award-gallery" id="awardGallery"></div>
+      <!-- Certificate image -->
+      <div class="row justify-content-center mt-5 fade-in">
+        <div class="col-lg-8">
+          <div class="award-photo-card" style="background:#fff; padding:16px;">
+            <img src="images/awards/1790752317368-s3j1oz.jpg"
+                 alt="National Excellence Award Certificate 2005 - Dhanraj Koche, Pragati Bahuuddeshiya Sanstha"
+                 style="max-height:480px; width:100%; object-fit:contain;">
+          </div>
+          <p class="text-center mt-3 opacity-75 small">Official Certificate — National Excellence Award 2005</p>
+        </div>
+      </div>
 
       <div class="row g-3 mt-5 fade-in">
         <div class="col-md-4">
           <div class="stat-box">
-            <div class="num">35+</div>
-            <div class="label">Years of Service</div>
+            <div class="num">2005</div>
+            <div class="label">National Excellence Award</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="stat-box">
-            <div class="num">₹1</div>
-            <div class="label">Per Consultation</div>
+            <div class="num">2008</div>
+            <div class="label">Best Honey Collection</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="stat-box">
-            <div class="num">2019</div>
-            <div class="label">Padma Shri</div>
+            <div class="num">2009</div>
+            <div class="label">Best Honey Collection</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Certificate / Licence logos section (shown if logos exist) -->
-  <section class="py-4" id="certLogoSection" style="display:none;background:#faf6ee">
-    <div class="container text-center">
-      <h5 class="fw-bold mb-3" style="color:var(--dark-brown)">Certifications &amp; Licences</h5>
-      <div class="cert-logo-row" id="certLogoRow"></div>
+  <!-- Our Awards & Recognition -->
+  <section class="py-5" style="background:var(--light-cream,#f5f0e8)">
+    <div class="container">
+      <div class="section-title fade-in text-center mb-5">
+        <h2>Our Awards &amp; National Recognition</h2>
+        <p class="text-muted">Recognised by the highest institutions for excellence in honey collection, village industries &amp; tribal empowerment</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6 fade-in">
+          <div class="timeline-award">
+            <div class="year">2003</div>
+            <h5 class="fw-bold mt-1">KVIC Enlistment — Beekeeping Industry</h5>
+            <p class="text-muted mb-0">Officially enlisted by Khadi &amp; Village Industries Commission (No. 6/127/VIC/2003-04 dated 20.05.2003) under Beekeeping Industry (AFBI) for implementation of Village Industries programme.</p>
+          </div>
+          <div class="timeline-award">
+            <div class="year">2003</div>
+            <h5 class="fw-bold mt-1">Advanced Training — Thailand</h5>
+            <p class="text-muted mb-0">Mr. Dhanraj D. Koche underwent Advanced Training in collection &amp; processing of Royal Jelly, Pollen and Propolis at Chiang Mai, Thailand (20–30 Nov 2003) under KVIC / Ministry of Agro &amp; Rural Industries.</p>
+          </div>
+          <div class="timeline-award">
+            <div class="year">2005</div>
+            <h5 class="fw-bold mt-1">National Excellence Award</h5>
+            <p class="text-muted mb-0">Conferred by Hon’ble President of India <strong>Dr. A.P.J. Abdul Kalam</strong> on Dhanraj Koche of Pragati Bahuuddeshiya Sanstha for excellence in Khadi &amp; Village Industries (28 Oct 2005, New Delhi).</p>
+          </div>
+        </div>
+        <div class="col-lg-6 fade-in">
+          <div class="timeline-award">
+            <div class="year">2006-07</div>
+            <h5 class="fw-bold mt-1">MAVIM Certificate of Excellence</h5>
+            <p class="text-muted mb-0">Awarded by Mahila Arthik Vikas Mahamandal (MAVIM – Government of Maharashtra) for outstanding quality and innovative work in the year 2006-07.</p>
+          </div>
+          <div class="timeline-award">
+            <div class="year">2006-07</div>
+            <h5 class="fw-bold mt-1">SBI Certificate of Appreciation</h5>
+            <p class="text-muted mb-0">State Bank of India, Zonal Office Nagpur, awarded Certificate of Appreciation for excellent performance in Self Help Groups Credit Linkage Programme (29 May 2007).</p>
+          </div>
+          <div class="timeline-award">
+            <div class="year">2008 &amp; 2009</div>
+            <h5 class="fw-bold mt-1">National Awards — Best Honey Collection</h5>
+            <p class="text-muted mb-0">Consecutive national honours for best performance in scientific honey collection and quality from Melghat forests.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- Certifications & Licences -->
+  <section class="py-5">
+    <div class="container">
+      <div class="section-title fade-in text-center mb-5">
+        <h2>Certifications, Licences &amp; Registrations</h2>
+        <p class="text-muted">Fully compliant · Transparent · Trusted by regulators and customers alike</p>
+      </div>
+
+      <!-- Logo row for FSSAI & Agmark -->
+      <div class="cert-logo-row mb-5 fade-in">
+        <img src="images/certs/fssai.png" alt="FSSAI Logo" title="FSSAI Certified" onerror="this.src='images/awards/1790752795628-1d5bps.png'">
+        <img src="images/certs/agmark.png" alt="Agmark Logo" title="Agmark Certified" onerror="this.src='images/awards/1790752579681-xd75u7.png'">
+      </div>
+
+      <div class="row g-4 mb-5">
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-certificate"></i></div>
+            <h6>FSSAI / Food Licence</h6>
+            <div class="cert-no">215142690000229<br>01 Nov 2014</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-award"></i></div>
+            <h6>Agmark Certificate</h6>
+            <div class="cert-no">A/1 No. 006514<br>09 Dec 2014</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-stamp"></i></div>
+            <h6>Khadi Mark</h6>
+            <div class="cert-no">KVIC/CRMC/MAH/019</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-file-invoice"></i></div>
+            <h6>GST Registration</h6>
+            <div class="cert-no">27AABTP2997A1ZH</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <h6>80G Registration</h6>
+            <div class="cert-no">PIN/CIT (Exempt)/Tec/80G/500/2016-17</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-balance-scale"></i></div>
+            <h6>12A Registration</h6>
+            <div class="cert-no">CIT/NGP/TECH/12A/P-39/2012-13</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-globe-asia"></i></div>
+            <h6>IEC (Importer-Exporter)</h6>
+            <div class="cert-no">5010000091</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-3 fade-in">
+          <div class="cert-card">
+            <div class="cert-icon"><i class="fas fa-trademark"></i></div>
+            <h6>Trade Mark</h6>
+            <div class="cert-no">1320422 Class-30<br>24 Mar 2017</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Document images gallery -->
+      <h4 class="fw-bold text-center mb-4" style="color:var(--dark-brown)">Official Documents, Awards &amp; Certificates</h4>
+      <p class="text-center text-muted mb-4" style="max-width:640px;margin:-8px auto 28px">Authentic certificates and letters issued to <strong>Pragati Bahuuddeshiya Sanstha</strong> and <strong>Dhanraj D. Koche</strong></p>
+      <div class="doc-gallery fade-in">
+
+        <div class="doc-card">
+          <img src="images/awards/1790752317368-s3j1oz.jpg" alt="National Excellence Award Certificate 2005 - Dhanraj Koche" loading="lazy"
+               onerror="this.src='images/awards/melghat_Award.jpg.jpeg'">
+          <div class="doc-caption">
+            <div class="doc-title">National Excellence Award</div>
+            <div class="doc-meta">Awarded to: <strong>Dhanraj Koche</strong></div>
+            <div class="doc-meta">Pragati Bahuuddeshiya Sanstha, Wardha</div>
+            <div class="doc-meta">By: President of India · Dr. A.P.J. Abdul Kalam</div>
+            <span class="doc-year">28 October 2005</span>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <img src="images/awards/Mavim Award_page-0001.jpg" alt="MAVIM Certificate of Excellence 2006-07" loading="lazy"
+               onerror="this.src='images/awards/mavim_award-1.jpg'">
+          <div class="doc-caption">
+            <div class="doc-title">MAVIM Certificate of Excellence</div>
+            <div class="doc-meta">Awarded to: <strong>Pragati Bahuuddeshiya Sanstha</strong></div>
+            <div class="doc-meta">Mahila Arthik Vikas Mahamandal</div>
+            <div class="doc-meta">Government of Maharashtra</div>
+            <span class="doc-year">2006 – 2007</span>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <img src="images/awards/SBI AWERD_page-0001.jpg" alt="SBI Certificate of Appreciation 2007" loading="lazy"
+               onerror="this.src='images/awards/sbi_award-1.jpg'">
+          <div class="doc-caption">
+            <div class="doc-title">SBI Certificate of Appreciation</div>
+            <div class="doc-meta">Awarded to: <strong>Pragati Bahuuddeshiya Sanstha, Pulgaon</strong></div>
+            <div class="doc-meta">State Bank of India · Zonal Office, Nagpur</div>
+            <div class="doc-meta">Excellent performance in SHG Credit Linkage</div>
+            <span class="doc-year">29 May 2007</span>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <img src="images/awards/Thailand training_page-0001.jpg" alt="Thailand Advanced Training Certificate - Dhanraj D. Koche" loading="lazy"
+               onerror="this.src='images/awards/thailand_training-1.jpg'">
+          <div class="doc-caption">
+            <div class="doc-title">Advanced Training Certificate</div>
+            <div class="doc-meta">Awarded to: <strong>Mr. Dhanraj D. Koche</strong></div>
+            <div class="doc-meta">Chiang Mai Healthy Products Co. Ltd., Thailand</div>
+            <div class="doc-meta">Royal Jelly, Pollen &amp; Propolis processing</div>
+            <span class="doc-year">20 – 30 Nov 2003</span>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <img src="images/awards/Direct Listing  Letter_page-0001.jpg" alt="KVIC Enlistment Letter 2003" loading="lazy"
+               onerror="this.src='images/docs/kvic_listing-1.jpg'">
+          <div class="doc-caption">
+            <div class="doc-title">KVIC Enlistment Letter</div>
+            <div class="doc-meta">Institution: <strong>Pragati Bahuuddeshiya Sanstha</strong></div>
+            <div class="doc-meta">Khadi &amp; Village Industries Commission</div>
+            <div class="doc-meta">Beekeeping Industry (AFBI) · No. 6/127/VIC/2003-04</div>
+            <span class="doc-year">20 May 2003</span>
+          </div>
+        </div>
+
+        <div class="visual-card">
+          <div class="v-icon"><i class="fas fa-file-contract"></i></div>
+          <div class="v-title">Trust Profile &amp; Registrations</div>
+          <div class="v-meta">Pragati Bahuuddeshiya Sanstha, Pulgaon</div>
+          <div class="v-meta">Registered Society Act 1860 · MAH/48/99</div>
+          <div class="v-meta">Public Charitable Trust · F/3759</div>
+          <div class="v-meta">GST · 80G · 12A · IEC · Trademark</div>
+          <span class="v-year">Official Record</span>
+        </div>
+
+        <div class="visual-card">
+          <div class="v-icon"><i class="fas fa-trophy"></i></div>
+          <div class="v-title">Awards &amp; Achievements</div>
+          <div class="v-meta">National Excellence Award 2005</div>
+          <div class="v-meta">Best Honey Collection 2008 &amp; 2009</div>
+          <div class="v-meta">SBI &amp; MAVIM SHG Excellence</div>
+          <div class="v-meta">KVIC National Performance Award</div>
+          <span class="v-year">Multiple Years</span>
+        </div>
+
+        <div class="visual-card">
+          <div class="v-icon"><i class="fas fa-building"></i></div>
+          <div class="v-title">Implementing Agency</div>
+          <div class="v-meta">Pragati Bahuuddeshiya Sanstha</div>
+          <div class="v-meta">Honey · Khadi · SHG Programmes</div>
+          <div class="v-meta">SFURTI Beekeeping Cluster</div>
+          <div class="v-meta">Tribal livelihood &amp; skill training</div>
+          <span class="v-year">Since 1999</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- What Drives Us -->
   <section class="py-5" style="background:var(--light-cream,#f5f0e8)">
     <div class="container">
       <div class="section-title fade-in">
@@ -335,27 +772,28 @@
           <div class="value-card text-center">
             <div class="feature-icon gold mx-auto"><i class="fas fa-bullseye"></i></div>
             <h4 class="fw-bold mt-2">Our Mission</h4>
-            <p class="text-muted mb-0">To promote natural living by providing pure, unadulterated honey while supporting tribal communities and preserving traditional harvesting methods.</p>
+            <p class="text-muted mb-0">To promote natural living by providing pure, unadulterated forest honey while empowering tribal communities through fair trade, skill training and sustainable harvesting practices.</p>
           </div>
         </div>
         <div class="col-md-4 fade-in">
           <div class="value-card text-center">
             <div class="feature-icon mx-auto"><i class="fas fa-eye"></i></div>
             <h4 class="fw-bold mt-2">Our Vision</h4>
-            <p class="text-muted mb-0">To bring pure forest honey to every home, making natural wellness accessible while creating sustainable livelihoods for forest communities.</p>
+            <p class="text-muted mb-0">To create lasting avenues for sustainable livelihoods for rural and tribal populations through collection of honey, beeswax and other bee products, backed by strong branding and ethical marketing.</p>
           </div>
         </div>
         <div class="col-md-4 fade-in">
           <div class="value-card text-center">
             <div class="feature-icon brown mx-auto"><i class="fas fa-heart"></i></div>
             <h4 class="fw-bold mt-2">Our Values</h4>
-            <p class="text-muted mb-0">Authenticity, sustainability, and community empowerment guide everything we do. We believe in transparency and ethical practices.</p>
+            <p class="text-muted mb-0">Authenticity, sustainability, community empowerment and complete transparency. We believe every jar should honour the forest, the bees and the hands that harvest it.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Why Choose -->
   <section class="py-5">
     <div class="container">
       <div class="section-title fade-in">
@@ -366,38 +804,39 @@
           <div class="why-card">
             <div class="icon-wrap"><i class="fas fa-leaf"></i></div>
             <h5 class="fw-bold">Raw &amp; Unprocessed</h5>
-            <p class="text-muted small mb-0">No heating, filtering, or processing — just pure honey as nature made it.</p>
+            <p class="text-muted small mb-0">No excessive heating or chemical processing — pure honey as nature intended, carefully handled for quality.</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 fade-in">
           <div class="why-card">
             <div class="icon-wrap"><i class="fas fa-flask"></i></div>
             <h5 class="fw-bold">Rich in Nutrients</h5>
-            <p class="text-muted small mb-0">Packed with natural enzymes, antioxidants, vitamins, and minerals.</p>
+            <p class="text-muted small mb-0">Packed with natural enzymes, antioxidants, vitamins and minerals from diverse Melghat forest flora.</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 fade-in">
           <div class="why-card">
             <div class="icon-wrap"><i class="fas fa-hands-helping"></i></div>
             <h5 class="fw-bold">Supports Tribal Communities</h5>
-            <p class="text-muted small mb-0">Fair trade practices that empower indigenous forest dwellers.</p>
+            <p class="text-muted small mb-0">Fair trade practices that empower indigenous forest dwellers and create sustainable livelihoods.</p>
           </div>
         </div>
         <div class="col-md-6 col-lg-3 fade-in">
           <div class="why-card">
             <div class="icon-wrap"><i class="fas fa-tree"></i></div>
             <h5 class="fw-bold">Sustainable Harvesting</h5>
-            <p class="text-muted small mb-0">Traditional methods that protect bee colonies and forest ecosystems.</p>
+            <p class="text-muted small mb-0">Scientific, non-destructive methods that protect rockbee colonies and the forest ecosystem.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- CTA -->
   <section class="py-5" style="background:linear-gradient(135deg,#2e7d32,#1b5e20);color:#fff">
     <div class="container text-center fade-in">
       <h2 class="mb-3">Taste the Forest. Support the Community.</h2>
-      <p class="mb-4 opacity-90">Every jar supports tribal livelihoods and pure, ethical honey from Melghat.</p>
+      <p class="mb-4 opacity-90">Every jar supports tribal livelihoods and pure, ethical honey from Melghat — backed by national awards and rigorous certifications.</p>
       <a href="products.html" class="btn btn-shop btn-lg me-2"><i class="fas fa-shopping-bag me-2"></i>Shop Now</a>
       <a href="bulk-order.html" class="btn btn-bulk btn-lg">Bulk Enquiry</a>
     </div>
@@ -408,7 +847,7 @@
       <div class="row g-4">
         <div class="col-md-4">
           <div class="mb-3"><img src="images/logo.png" alt="Melghat Honey" class="footer-logo-img"></div>
-          <p class="text-white-50">Pure organic forest honey harvested by tribal communities of Melghat, Maharashtra.</p>
+          <p class="text-white-50">Pure organic forest honey harvested by tribal communities of Melghat, Maharashtra. A initiative of Pragati Bahuuddeshiya Sanstha.</p>
         </div>
         <div class="col-md-4">
           <h6 class="text-warning mb-3">Quick Links</h6>
@@ -461,40 +900,5 @@
   <script src="js/chatbot.js"></script>
   <script src="js/auth-ui.js"></script>
   <script src="js/main.js"></script>
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // Keep the main Padma Shri award image as-is (do NOT overwrite it)
-    // Main image is already set in HTML: images/awards/melghat_Award.jpg.jpeg
-
-    // The 3 certificate / licence / logo images from the bucket
-    const CERT_BASE = "https://dmehkoxuczhfhnjinniy.supabase.co/storage/v1/object/public/certificates/";
-
-    const galleryImages = [
-      {
-        url: CERT_BASE + "1790752317368-s3j1oz.jpg",
-        kind: "doc"   // certificate / licence
-      },
-      {
-        url: CERT_BASE + "1790752579681-xd75u7.png",
-        kind: "logo"
-      },
-      {
-        url: CERT_BASE + "1790752795628-1d5bps.png",
-        kind: "logo"
-      }
-    ];
-
-    // Show only these 3 images in the gallery below the main award
-    const gallery = document.getElementById("awardGallery");
-    if (gallery) {
-      gallery.innerHTML = galleryImages.map(c => `
-        <div class="award-photo-card ${c.kind === "logo" ? "is-logo" : "is-doc"}">
-          <img src="${c.url}" alt="" loading="lazy"
-               onerror="this.parentElement.style.display='none'">
-        </div>
-      `).join("");
-    }
-  });
-</script>
 </body>
 </html>
