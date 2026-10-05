@@ -374,6 +374,56 @@
       font-size: 0.85rem;
     }
 
+    /* Directors section */
+    .director-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+      border: 1px solid #f0e6d0;
+      height: 100%;
+      transition: all 0.35s ease;
+      text-align: center;
+    }
+    .director-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(78,52,46,0.16);
+      border-color: rgba(244,180,0,0.45);
+    }
+    .director-photo {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      background: #f5f0e8;
+    }
+    .director-photo-placeholder {
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(145deg, #faf6ee 0%, #f0e6d0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: rgba(78,52,46,0.25);
+    }
+    .director-body {
+      padding: 22px 18px 26px;
+    }
+    .director-body h5 {
+      font-weight: 700;
+      color: #3e2723;
+      margin-bottom: 4px;
+      font-size: 1.1rem;
+    }
+    .director-body .role {
+      font-size: 0.85rem;
+      color: #b8860b;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+
     @media (max-width: 768px) {
       .story-hero { min-height: 40vh; }
       .overlap-wrap { min-height: 340px; max-width: 100%; }
@@ -383,6 +433,8 @@
       .stat-box .num { font-size: 1.7rem; }
       .award-photo-card img { max-height: 300px; }
       .doc-card img { height: 180px; }
+      .director-photo, .director-photo-placeholder { height: 220px; }
+      .director-body h5 { font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -473,6 +525,58 @@
           <div class="col-md-4">
             <h5 class="fw-bold" style="color:var(--dark-brown)"><i class="fas fa-globe me-2" style="color:#f4b400"></i>From Forest to World</h5>
             <p class="text-muted mb-0 small">Melghat Honey is sold across major Indian cities and has been regularly exported to Dubai and Japan — a testament to its unmatched purity and quality.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Directors -->
+  <section class="py-5" style="background:var(--light-cream,#f5f0e8)">
+    <div class="container">
+      <div class="section-title fade-in text-center mb-5">
+        <h2>Our Directors</h2>
+        <p class="text-muted">Leadership guiding Melghat Honey and Pragati Bahuuddeshiya Sanstha</p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        <div class="col-6 col-md-6 col-lg-3 fade-in">
+          <div class="director-card">
+            <img src="images/directors/dhanraj-koche.jpg" alt="Dhanraj D. Koche" class="director-photo">
+            <div class="director-body">
+              <h5>Dhanraj D. Koche</h5>
+              <p class="role">Director</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 fade-in">
+          <div class="director-card">
+            <img src="images/directors/prashant-girme.jpg" alt="Prashant Girme" class="director-photo">
+            <div class="director-body">
+              <h5>Prashant Girme</h5>
+              <p class="role">Director</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 fade-in">
+          <div class="director-card">
+            <div class="director-photo-placeholder">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="director-body">
+              <h5>Dr. Dayanand Sonsale</h5>
+              <p class="role">Director</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-6 col-lg-3 fade-in">
+          <div class="director-card">
+            <div class="director-photo-placeholder">
+              <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="director-body">
+              <h5>Tejas Navgire</h5>
+              <p class="role">Director</p>
+            </div>
           </div>
         </div>
       </div>
